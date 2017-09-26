@@ -1,0 +1,31 @@
+#menu
+ {
+  position:fixed;
+  top:0px;
+  left:0px;
+  height:900px;
+  width:100px;
+  z-index:99;
+  
+  }
+  .sm
+  {
+   color:white;
+   width:100px;
+   height:100px;
+  } 
+  .sm-im
+  {
+   height:100px;
+   width:100px;
+ } 
+  .sm a
+ {
+  color:white;
+  text-decoration:none;
+}	
+.sm:hover
+{
+cursor:pointer;
+text-shadow:2px 6px 3px red;
+}

@@ -1,0 +1,132 @@
+body
+{
+  background-image:url("im/back5.jpg");
+  color:white;
+  }
+  .name
+   {
+     border-radius:10px;
+   position:absolute;
+     top:1px;
+	   left:100px;
+	}   
+  a
+  {
+  color:white;
+  }
+  .top
+  {
+   background-image:url("icon/menu.png");
+   height:50px;
+   width:1340px;
+   
+   }
+   .itop
+      {
+	   background-color:#66335C;
+	   height:20px;
+	   margin-top:8px;
+	   margin-left:20px;
+	   padding:4px;
+	   border-radius:5px;
+	   position:relative;
+	     left:600px;
+	   float:left;
+	   }
+   #about
+      {
+	  
+		  
+	  color:red;
+	  height:100px;
+	   width:400px;
+	   
+	  
+	 } 
+	 #login
+	   {
+	     width:300px;
+		 height:150px;
+		 position:absolute;
+		   top:100px;
+		    left:900px; 
+		}
+	#flog
+         {
+      background-color:#ADAD85;
+         color:#8C4594;
+	   border-radius:5px;
+     }		 
+	 .field
+	 {
+	   height:150px;
+	   width:300px;
+	  border-radius:10px;
+	   background-color:#94B0C7;
+	   color:black;
+	  }
+	#photo
+         {
+       
+	   height:310px;
+	   width:800px;
+	   
+	 }
+  .bottom
+   {
+   position:relative;
+     top:600px;
+	 right:500px;
+  }	 
+  .td
+    {
+	margin-left:100px;
+	
+	}
+   	 #im1
+           {
+       height:400px;
+       width:600px;
+     }	
+ .c1
+ {
+   background-image:url("im/pic1.jpg");
+   background-position:center;
+
+   border-radius:10px;
+ position:absolute;
+  left:900px;
+
+  }
+  
+  .bdiv
+    {
+	 width:1365px;
+	 background-image:url("im/ani3.gif");
+	 background-position:center;
+	 margin-left:0px;
+	 position:absolute;
+	   bottom:0px;
+	   left:0px;
+	 }
+	 .down
+	 {
+	  color:red;
+	  border-radius:10px;
+	  opacity:.5;
+	  margin-left:180px;
+	  background-color: #00F099;
+	 float:left;
+	 padding:5px;
+	 }
+	 #bot1,#bot3
+	 {
+	   margin-top:22px;
+	  }
+	  #bot1 a
+	   {
+	    color:red;
+		}
+		
+		
+   		

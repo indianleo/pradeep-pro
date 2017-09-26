@@ -1,0 +1,49 @@
+.menu_bar{
+    height:50px;
+    width:100%;
+    background: #ccc;
+}
+.menu_icon{
+    z-index: 99;
+    background:#ccc;
+    color:#fff;
+    padding-right:10px;
+    cursor: pointer;
+}
+.menu_back{
+    position: absolute;
+    height:5px;
+    width:100px;
+    z-index: 1;
+    background:#900C3E;
+}
+.menu_item_box{
+    z-index: 9;
+    position: absolute;
+    right:10px;
+    top:45px;
+}
+.menu_items{
+    height:5px;
+    width:100px;
+    margin: 5px;
+    position: absolute;
+    z-index: 9;
+    transition: all 1s;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    cursor: pointer;
+}
+
+.menu_items a{
+    z-index: 99999;
+    text-decoration: none;
+    display: none;
+}
+.menu_items:hover .menu_back{
+    background:#C70039;
+}
+.menu_items span{
+    z-index: 9;
+    color:#fff;
+}

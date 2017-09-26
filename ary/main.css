@@ -1,0 +1,108 @@
+.back_cover{
+  position: fixed;
+  top:0;
+  left:0;
+  background: url('image/bg.jpg');
+  background-size:cover;
+  height:100%;
+  width:100%;
+  z-index: -999;
+}
+.back{
+  position: absolute;
+  left:0px;
+  filter:blur(3px);
+  width:100%;
+}
+.center_item,.back,.center_content{
+  min-height:400px;
+}
+.center_title {
+  border-left:3px solid #4EC2E6;
+  padding:5px 20px 5px 5px;
+}
+.center_label{
+  color:#4EC2E6;
+}
+.center_btn{
+  background: #4EC2E6;
+  color:#fff;
+  font-weight:bold;
+  height:30px;
+  width:100px;
+  padding:4px;
+  border:1px solid #20b3df;
+  text-align:center;
+  border-radius:2px;
+}
+.center_btn:hover{
+  background: #1da1c9;
+  cursor:pointer;
+}
+.service_items{
+  margin-top:5px;
+}
+.services_box{
+  border-radius:2px;
+  height:150px;
+  border:1px solid #4EC2E6;
+  background-size: 100% 100%;
+  transition: all .5s;
+}
+.services_box:hover{
+  height:170px;
+}
+/*----------------------start slider css---------------*/
+.image_slider{
+  z-index:-1;
+}
+.carousel-inner{
+  max-height:550px;
+}
+.item{
+  max-height:550px;
+}
+.item img{
+  max-height: 550px;
+  width: 100%;
+}
+/*----------------------end carousel css---------------- */
+.co_image{
+  border-radius:50%;
+  height:250px;
+  width:250px;
+  box-shadow: 0px 0px 10px 1px #000;
+  position:relative;
+  left:90px;
+  
+}
+.co_data{
+  margin:5% auto;
+  box-shadow:0 0 10px 1px #000;
+  padding-left:100px;
+  border-radius: 10px;
+  width:64%;
+}
+.co_image,.co_data{
+  float:left;
+}
+.owner_inner{
+  height:300px;
+  padding-top:20px;
+  maring:0 auto;
+  width:100%;
+}
+
+
+@media only screen and (max-width: 500px) {
+  .co_data{
+    padding:10px;
+    width:100%;
+  }
+  .owner_inner{
+    width:100%;
+  }
+  .co_image{
+    position:inherit;
+  }
+}

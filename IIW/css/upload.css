@@ -1,0 +1,44 @@
+input[type="checkbox"]{
+    -webkit-appearance: none;
+    border:1px solid gray;
+    height:20px;
+    width:20px;
+}
+
+input[type="checkbox"]:checked::before{
+    content: '✔';
+    position: absolute;
+    top: 4px; 
+    left: 20px;
+    font-size: 14px;
+    color: #09ad7e;
+    transition: all .2s; /* animation incoming :p */
+}
+.side_menu {
+    position: fixed;
+    top:100px;
+    left:0px;
+    z-index: 9999;
+}
+.side_menu_items{
+    height:40px;
+    width: 150px;
+    font-weight: 500;
+    box-shadow: 0 0 10px 1px #ccc;
+    margin-top:10px;
+    z-index: 99999;
+    cursor: pointer;
+    background: #C70039;
+    color: #fff;
+}
+.interface{
+    width:100%;
+    height: 500px;
+    z-index: 99;
+    overflow: auto;
+    background: url("../image/back8.jpg");
+    background-size:100% 100%;
+}
+.news_upload label, .records_upload label{
+    color:#ff6600;
+}

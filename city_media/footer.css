@@ -1,0 +1,33 @@
+.footer_box{
+	background: #373941;
+}
+.footer_hedaer_bg{
+	background: #25262C;
+}
+.footer_back{
+	background: #2C2D34;
+}
+.text_white{
+	color:#fff;
+}
+.footer_border_bottom{
+	border-bottom: 1px solid rgba(0,0,0,.2);
+}
+.footer_border{
+	    border: 1px solid rgba(0,0,0,.2);
+}
+.social_btn{
+	width:50px;
+	height:50px;
+	border-radius: 3px;
+	transition: all 1s;
+}
+.social_btn:hover{
+	border: 1px solid #fff;
+}
+.center{
+	display: -webkit-flex;
+    display: flex;
+  	align-items: center;
+  	justify-content: center;
+}

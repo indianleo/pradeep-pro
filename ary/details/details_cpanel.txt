@@ -1,0 +1,3 @@
+url :- http://aryinfrarealcon.com:2082
+user id =:- aryinfrarealcon
+password= :- 786Pr@deeP

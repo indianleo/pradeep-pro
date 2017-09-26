@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+	<head>
+		<title>ECMA SCRIPT 6</title>
+	</head>
+	<body>
+		<script>
+			   let arr = ['a', 'b', 'c'];
+				for (let [i,elem] of arr.entries()) 
+				{
+					console.info(i+" = "+elem);
+				}
+				var x = ['a', 'b'];
+				var y = ['c'];
+				var z = ['d', 'e'];
+				var ar_n = [...x, ...y, ...z];
+				console.log(ar_n);
+				 class math
+				{
+				  constructor(num1,num2)
+				  {
+					let x = num1;
+					let y = num2;
+				  }
+				  square()
+				  {
+					return x*y;
+				  }
+				}
+				class disp extends math
+				{
+				  consturctor(name,num1,num2)
+				  {
+					super(num1,num2);
+					this.name = name;
+				  }
+				  show()
+				  {
+					console.log(this.name + " -> " + super.square());
+				  }
+				}
+				var obj = new disp('square',10,20);
+				obj.show();
+				
+		</script>
+	</body>
+</html>

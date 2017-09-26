@@ -1,0 +1,23 @@
+.footer_box{
+    background: #15181B;
+    color
+}
+.footer_middle{
+    border-left:1px solid #ccc;
+    border-right:1px solid #ccc;
+}
+.link_icon{
+    height:40px;
+    width:40px;
+    border:1px solid #fff;
+    margin: 5px;
+    display: -webkit-flex;
+    display: flex;
+  	align-items: center;
+  	justify-content: center;
+    border-radius:2px;
+    cursor:pointer;
+}
+.link_icon:hover{
+    background: #E91E63;
+}

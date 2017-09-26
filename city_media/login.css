@@ -1,0 +1,13 @@
+.admin_login_holder{
+	display: none;
+}
+.login_box{
+	width:40%;
+	border-radius:3px;
+}
+.login_label{
+	
+}
+.login_inputs{
+	width:310px !important;
+}
