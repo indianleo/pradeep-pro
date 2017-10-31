@@ -86,6 +86,7 @@
         $image_name = uniqid().$_FILES['news_pic']['name'];
         $f_path="news_image/$image_name";
         $isUri = $data['isUri'] ? 1 : 0;
+        $news_img = strlen($_FILES['news_pic']['name']) > 0 ? $f_path :'image/news_default.jpg';
         $res = mysqli_query($con,"
                                     insert 
                                         into 
@@ -102,7 +103,7 @@
                                     ) 
                                     values(
                                         '$data[news_title]',
-                                        '$f_path',
+                                        '$news_img',
                                         '$data[news_info]',
                                         '$data[news_source]',
                                         '$data[news_type]',

@@ -1,4 +1,5 @@
 <?php
+    session_start();
     //$con = mysqli_connect("localhost","abcnewse_db","786Anamika","abcnewse_db");
 	
 	// testing purpose only
@@ -12,8 +13,50 @@
         break;
         case "records_upload" : upload_record($con,$data);
         break;
+        case "join" : registeraton($con,$data);
+        break;        
+        case "login" : login($con,$data);
+        break;
         default : echo "Action -> ". $data['action'] ." <- not found !!!";
         break;
+    }
+
+    function login($con,$data) {
+        $res = mysqli_query($con,"select * from users where `email` = '$data[user_id]' and `pass` = '$data[user_pass]' ");
+        if ( $res ) {
+            $ans = mysqli_fetch_assoc($res);
+            $_SESSION['user'] = $ans;
+            header("location:users.php");
+        } else {
+            header("location:index.php");
+        }
+    }
+
+    function registeraton($con,$data) {
+        $res = mysqli_query($con,"insert 
+                                    into 
+                                users(
+                                    `name`,
+                                    `email`,
+                                    `pass`,
+                                    `adhaar`,
+                                    `contact`,
+                                    `city`
+                                ) 
+                                values(
+                                    '$data[user_name]',
+                                    '$data[user_email]',
+                                    '$data[user_pass]',
+                                    '$data[user_adhaar]',
+                                    '$data[user_mobile]',
+                                    '$data[user_city]'
+                                )"
+                            );
+        if ( $res ) {
+            header("location:index.php");
+        } else {
+            echo "Registration Failed. Please Try Again !!!";
+        }
     }
 
     function upload_record($con,$data){

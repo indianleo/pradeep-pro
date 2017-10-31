@@ -17,7 +17,7 @@
     color:#f2f2f2;
 }
 .news_tiles_box{
-    justify-content: space-around;
+    
 }
 .news_tiles{
     align-items: flex-end;
@@ -28,6 +28,7 @@
     background-size: 100% 100% !important;
     margin:0 0 20px 20px;
     cursor: pointer;
+    float: left;
 }
 .news_tiles_footer{
     background: #f2f2f2;
@@ -37,13 +38,26 @@
     position: relative;
     bottom: 15px;
     height:30px;
-    width:70px;
+    width:115px;
     font-weight: 600;
     color:#f2f2f2;
     background: #C70039;
 }
-.timeline,.news_title{
-    height:30px;
+.news_read{
+    height:25px;
+    width:100px;
+    border : none;
+    border-radius: 2px;
+    font-weight: 500;
+    color:#f2f2f2;
+    background: #C70039;
+    margin-top:5px;
+    margin-bottom: 5px;
+}
+.timeline,.news_title,.news_read_button{
+    min-height:30px;
+    max-height:50px;
     font-weight: 600;
     padding-left:10px;
+    overflow: hidden;
 }

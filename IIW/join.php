@@ -33,7 +33,7 @@
                     <br/>
                 </div>
                 <div class="form">
-                    <form action="process.php" name="reg_form" method="post">
+                    <form action="action.php" name="reg_form" method="post">
                         <input type="hidden" name="action" value="join" />
 
                         <div class="row form-group">
@@ -78,6 +78,15 @@
                             </div>
                             <div class="col-sm-9">
                                 <input type="number" name="user_adhaar" id="user_adhaar" class="form-control" placeholder="Enter Adhaar No."/>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-sm-2">
+                                <lable for="user_city">City</label>
+                            </div>
+                            <div class="col-sm-9">
+                                <input type="text" name="user_city" id="user_city" class="form-control" placeholder="Enter City"/>
                             </div>
                         </div>
 

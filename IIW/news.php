@@ -24,8 +24,7 @@
         </div>
 
         <div class="news_pane">
-            <div class="news_tiles_box container flex_box" id="news_tiles_box">
-
+            <div class="news_tiles_box container-fluid" id="news_tiles_box">
                 <?php
                     $con = mysqli_connect("localhost","root","","iiw");
                     $res = mysqli_query($con,"select * from news");
@@ -33,13 +32,31 @@
                     if ( mysqli_num_rows($res) > 0 ) {
                         while($row = mysqli_fetch_assoc($res)) {
                             $fetch_data .= '
-                                <div class="news_tiles flex_box" style="background:url('.$row["news_pic"].');">
+                                <div 
+                                    class = "news_tiles flex_box" 
+                                    style = "background:url('.$row["news_pic"].');"
+                                >
                                     <div class="news_tiles_footer">
                                         <div class="tag center">
                                             '. $row["news_type"] .'
                                         </div>
                                         <div class="news_title">
                                             '. $row["news_title"] .'
+                                        </div>
+                                        <div class="news_read_button">
+                                            <button 
+                                                onclick = "readNews(this)" 
+                                                source = "'. $row["news_source"] .'"
+                                                details = "'. $row["news_info"] .'"
+                                                date = "'. $row["news_date"] .'"
+                                                title = "'. $row["news_title"] .'"
+                                                type = "'. $row["news_type"] .'"
+                                                place = "'. $row["news_place"] .'"
+                                                pic = "'. $row["news_pic"] .'"
+                                                class = "news_read"
+                                            >
+                                                Read More...
+                                            </button>
                                         </div>
                                         <div class="timeline">
                                             <span style="color:#3399ff;">
