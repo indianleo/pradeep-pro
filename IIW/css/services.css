@@ -1,0 +1,10 @@
+.top_section{
+    height : 300px;
+    width : 100%;
+    background: pink;
+}
+.service_box{
+    background: #33545B;
+    padding-top: 50px;
+    padding-bottom :50px;
+}
