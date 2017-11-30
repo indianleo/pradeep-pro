@@ -19,7 +19,7 @@
                         <div class="tiles_item center vFlex bg_black">
                             <div class="tiles_image row">
                                 <img 
-                                    src = "image/back4.jpg" 
+                                    src = "image/information.jpg" 
                                     class = "img-responsive" 
                                     alt = "tiles images" 
                                 />
@@ -158,7 +158,7 @@
                             </div>
                             <div class="tiles_tag text-center" style="height:30px;color:#00cc99;">
                                 <span>
-                                    A place to read & Share News
+                                    A place to Read & Share News
                                 </span>
                             </div>
                             <div class="tiles_btn btn_style text_white" style="border:1px solid #e6e6e6;">
@@ -182,10 +182,10 @@
                                 style = "padding-top:15px;padding-bottom:50px;"
                             >
                                 <span>
-                                    We provide e-teaching and tutor. We provide coaching 
-                                    for C, C++, JavaScript, 
+                                    We provide Training on C, C++, JavaScript, 
                                     React Native(<span  style="color:#FF6C00;">IOS</span> & <span style="color:#FF6C00;">Android</span>),
-                                     React and new Technologies. 
+                                    React or new Technologies and Coachings for 
+                                    <span  style="color:#FF6C00;">6th-10th</span> class. 
                                     Here you can get stuff for exam prepartion.
                                 </span> 
                             </div>
@@ -196,7 +196,7 @@
                             </div>
                             <div class="tiles_tag text-center" style="height:30px;color:#00cc99;">
                                 <span>
-                                    A place to learn 
+                                    Learn according to your intrest
                                 </span>
                             </div>
                             <div class="tiles_btn btn_style text_white" style="border:1px solid #e6e6e6;">
@@ -220,19 +220,20 @@
                                 style = "padding-top:15px;padding-bottom:50px;"
                             >
                                 <span>
-                                    We provide Jobs according to your skills. Here you will find
-                                    most relevent job according to you desired location and we promise 
-                                    that you will never disappoint here.
+                                    We provide Book library where you can get books on rent for stdy.
+                                    the book rent will be <span style="color:#FF6C00;">1/3</span> of
+                                     book price. This is for saving your money
+                                    and no tension of holding lots of book in your cupboard.
                                 </span> 
                             </div>
                             <div class="tiles_title text-center text_white" style="font-size:28px;">
                                 <span>
-                                   ...............
+                                   Book Library
                                 </span>
                             </div>
                             <div class="tiles_tag text-center" style="height:30px;color:#00cc99;">
                                 <span>
-                                    Under Devlopement Services
+                                    You can get Books on Rent for study
                                 </span>
                             </div>
                             <div class="tiles_btn btn_style text_white" style="border:1px solid #e6e6e6;">
@@ -249,6 +250,7 @@
                     <!-- tiles row end -->
 
                 </div>
+                
 
             </div>
         </div>
