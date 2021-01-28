@@ -1,0 +1,29 @@
+body{
+    background-image:url('../image/back3.jpg');
+    background-size:cover;
+}
+.search_bar span{
+    cursor:pointer;
+    background:#900C3E;
+    color:#f2f2f2;
+    border: 2px solid transparent;
+}
+.search_bar span:hover{
+    background:#C70039;
+}
+.search_bar input{
+    border: 1px solid #900C3E;
+    background:transparent;
+    color:#f2f2f2;
+}
+.search_box{
+    min-height:700px;
+    color:#f2f2f2;
+}
+.filter_data{
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+.record_about{
+    
+}

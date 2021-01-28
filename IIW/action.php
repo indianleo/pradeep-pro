@@ -8,8 +8,12 @@
 	foreach ($_REQUEST as $key => $value) {
 	  $data[$key] = $value;
     }
-    switch( $data['action'] ){
-        case "news_upload" : upload_news($con,$data);
+    switch($data['action']){
+        case "update_post" : update_post($con,$data);
+        break;
+        case "update_post_reviews" : update_post_reviews($con,$data);
+        break;
+        case 'get_post' : get_post($con,$data);
         break;
         case "records_upload" : upload_record($con,$data);
         break;
@@ -22,34 +26,32 @@
     }
 
     function login($con,$data) {
-        $res = mysqli_query($con,"select * from users where `email` = '$data[user_id]' and `pass` = '$data[user_pass]' ");
+        $res = mysqli_query($con,"select * from user where `email` = '$data[email]' and `pass` = '$data[pass]' ");
         if ( $res ) {
             $ans = mysqli_fetch_assoc($res);
             $_SESSION['user'] = $ans;
-            header("location:users.php");
+            header("location:blogs.php");
         } else {
-            header("location:index.php");
+            header("location:index.php?error=login Failer");
         }
     }
 
-    function registeraton($con,$data) {
-        $res = mysqli_query($con,"insert 
+    function registeraton($con, $data) {
+        $res = mysqli_query($con, "insert 
                                     into 
-                                users(
+                                user(
                                     `name`,
                                     `email`,
                                     `pass`,
-                                    `adhaar`,
-                                    `contact`,
-                                    `city`
-                                ) 
+                                    `dob`,
+                                    `mobile`
+                                )
                                 values(
-                                    '$data[user_name]',
-                                    '$data[user_email]',
-                                    '$data[user_pass]',
-                                    '$data[user_adhaar]',
-                                    '$data[user_mobile]',
-                                    '$data[user_city]'
+                                    '$data[name]',
+                                    '$data[email]',
+                                    '$data[pass]',
+                                    '$data[dob]',
+                                    '$data[mobile]'
                                 )"
                             );
         if ( $res ) {
@@ -59,7 +61,7 @@
         }
     }
 
-    function upload_record($con,$data){
+    function upload_reply($con,$data){
         $html = '
             <div class="records_upload">
                 <br/>
@@ -150,107 +152,99 @@
         echo $html;
     }
 
-    function upload_news($con,$data) {
-        $html = '
-            <div class="news_upload">
-                <br/>
-                <form method="post" action="web_action.php" enctype="multipart/form-data">
-                    <input type="hidden" name="action" value="save_upload_news" />
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="news_title">News Title</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" name="news_title" id="news_title" class="form-control" placeholder="News Title" />
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="news_type">News Type</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <select name="news_type" id="news_type" class="form-control">
-                                <option value="other">Select</option>
-                                <option value="latest">Latest</option>
-                                <option value="bussiness">Bussiness</option>
-                                <option value="national">National</option>
-                                <option value="international">International</option>
-                                <option value="education">Educational</option>
-                                <option value="entertainments">Entertainments</option>
-                                <option value="sports">Sports</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="news_pic">News Image</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="file" name="news_pic" id="news_pic" />
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="news_info">News Details</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <textarea name="news_info" id="news_info" class="form-control" placeholder="News Details"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="news_place">News Place</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" name="news_place" id="news_place" class="form-control" placeholder="News Place" />
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="isUri">Use News Url</label>
-                        </div>
-                        <div class="col-sm-1">
-                            <input type="checkbox" name="isUri" id="isUri" class=""/>
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="text" name="news_source" id="news_source" class="form-control" placeholder="News Source" />
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="news_date">News Date</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="date" name="news_date" id="news_date" class="form-control" placeholder="News Date" />
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                            <label for="upload_by">Upload By</label>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" name="upload_by" id="upload_by" class="form-control" placeholder="Upload By" />
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-sm-2 col-sm-offset-2">
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="submit" name="news_submit" id="news_submit" class="btn btn-success" value="Upload" />
-                        </div>
-                    </div>
-                </form>
-            </div>
-        ';
-        echo $html;
+    function update_post($con, $data) {
+        $post_status = "pending";
+        //$update_date = 
+        $post_image_path = "post/".uniqid().$_FILES['post_image']['name'];
+        $res = mysqli_query($con, "insert 
+                                        into 
+                                    post (
+                                        `user_email`,
+                                        `date`,
+                                        `post_title`,
+                                        `post_image`,
+                                        `post_content`,
+                                        `post_status`,
+                                        `post_type`
+                                    )
+                                    values(
+                                        '$data[user_email]',
+                                        NOW(),
+                                        '$data[post_title]',
+                                        '$post_image_path',
+                                        '$data[post_content]',
+                                        '$post_status',
+                                        '$data[post_type]'
+                                    )"
+                                );
+        if ( $res ) {
+            move_uploaded_file($_FILES['post_image']['tmp_name'], $post_image_path);
+            header("location:blogs.php");
+        } else {
+            var_dump($res);
+            echo "Update Failed. Please Try Again !!!";
+        }
     }
 
+    function update_post_reviews($con, $data) {
+        $review_status = "pending";
+        $res = mysqli_query($con, "insert 
+                                        into 
+                                    reviews (
+                                        `post_id`,
+                                        `user_email`,
+                                        `user_website`,
+                                        `user_name`,
+                                        `user_review`,
+                                        `status`,
+                                        `date`
+                                    )
+                                    values(
+                                        '$data[post_id]',
+                                        '$data[user_email]',
+                                        '$data[user_website]',
+                                        '$data[user_name]',
+                                        '$data[user_review]',
+                                        '$review_status',
+                                        NOW()
+                                    )"
+                                );
+        if ( $res ) {
+            header("location:blogs.php");
+        } else {
+            var_dump($res);
+            echo "Update Failed. Please Try Again !!!";
+        }
+    }
+
+    function get_post($con, $data) {
+        $user_email = $_SESSION['user']['email'];
+        if ($data['id']) {
+            $res = mysqli_query($con, "select * from post where id='$data[id]' ");
+        } else {
+            $res = mysqli_query($con, "select * from post where user_email='$user_email' and post_type='$data[post_type]' ");
+        }
+       // $ans = mysqli_fetch_assoc($res);
+        $ans = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        if ($ans) {
+           // var_dump(json_encode($ans));
+           echo json_encode($ans);
+        } else {
+            echo "Error in loading...";
+        }
+
+        return $html;
+    }
+
+    function get_post_reviews($con, $data) {
+        $res = mysqli_query($con, "select * from reviews where post_id='$data[post_id]'");
+        $ans = mysqli_fetch_all($res, MYSQLI_ASSOC);
+        if ($ans) {
+            echo json_encode($ans);
+        } else {
+            echo "Error in loading...";
+        }
+
+        return $html;
+    }
 ?>
