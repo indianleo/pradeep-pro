@@ -1,6 +1,6 @@
 {
   "name": "javscript_helper",
-  "version": "1.0.6",
+  "version": "1.0.10",
   "description": "Provide JQ alternative functions and features",
   "main": "JUI.js",
   "scripts": {
@@ -13,7 +13,10 @@
   "keywords": [
     "JS",
     "JQ",
-    "dragble",
+    "javascript",
+    "JUI",
+    "ES6",
+    "dragable",
     "vanila",
     "pradeep"
   ],
@@ -22,5 +25,5 @@
   "bugs": {
     "url": "https://github.com/indianleo/pradeep-pro/issues"
   },
-  "homepage": "https://github.com/indianleo/pradeep-pro#readme"
+  "homepage": "https://github.com/indianleo/pradeep-pro/tree/master/helper#readme"
 }

@@ -1,5 +1,5 @@
 # JUI <javascript helper>
-Pure javscript based package, with no dependencies
+Pure javascript based package, with no dependencies
 
 #### Intro
 
@@ -21,6 +21,7 @@ Pure javscript based package, with no dependencies
 #### Npm
 ``` sh
 $ npm install javscript_helper --save
+or
 $ npm i javscript_helper
 ```
 
@@ -30,7 +31,7 @@ $ npm i javscript_helper
 ### 2. Import JUI.js from package
 ```
 /**
-* default Export : 'JUI'
+* Default Export : 'JUI'
 * Dragable : 'Dragable feature'
 * API : 'class for api mthods (can overwrite)'
 * construtor : accpet object as default options
@@ -39,22 +40,52 @@ $ npm i javscript_helper
 import JUI from 'JUI';
 const JS = new JUI({});
 
-// Use selector for class like
+//Syntax:
+// action may be ['show', 'hide', 'toggleDisplay', 'addClass', 'removeClass' 
+// 'toggleClass', 'html', 'value', 'text', 'checked', 'remove', 'removeAttr' and 'css'].
+// actionData will be data which need to set on that action. It may be object or string depends upon action
+// Ex: css take object to set css on elements while html need string to set.
+JS.selectAll(selector, action, actionData);
+
+// Use selector for class without anyother action.
+// This will return an array of found elements
 JS.selectAll('#test');
+// To set multiple classes
+JS.selectAll(".test", 'addClass', ['help', 'note']);
+// To set single class
+JS.selectAll(".test", 'addClass', 'note');
+// To set innerHTML like $().html()
+JS.selectAll(".test", 'html', "<p>test html</p>');
+// To set multiple css on selected elements
+JS.selectAll(".test", 'css', {border: "1px solid red", color: '#fff'});
 
-// To set js action like add multiple classes
-JS.selectAll(".test",{action:'addClassl', actionData:['help', 'note']);
+// Find target node into base node and some extra selectors and 
+// It also handle other action with data as {action: 'addClass',actionData: 'test'}
+// action may be ['show', 'hide', 'toggleDisplay', 'addClass', 'removeClass' 
+// 'toggleClass', 'html', 'value', 'text', 'checked', 'remove', 'removeAttr' and 'css'].
+// data argument can carry Object as mention above or ['hidden', 'visible', 'selected', 'checked', 'enabled'] to provide extra selectors
+JS.find(baseSelector, target, data );
+ a) JS.find(baseSelector, targetSelector, 'all') // to return all matched.
+ b) JS.find(baseSelector, targetSelector, 'checked')// to return all checked
+ c) JS.find(baseSelector, targetSelector, {action:'html', actionData: 'hello user'}); // To set html in find elements.
+ d) JS.find(baseSelector, targetSelector, {action:'css', actionData: {background: 'red'} }); // To set html in find elements.
 
-// alternative of $('baseSelector').on('eventName', 'targetSelector, function() {});
+// Alternative of $('baseSelector').on('eventName', 'targetSelector, function() {});
 JS.listen('baseSelector', 'eventName', 'targetSelector', (_this, event) {});
 
+// Bind listenr on all node like classname
+JS.listenAll(target, eventName, func);
+
+// bind event directly on nodes
+JS.bind(selector, eventName, handler);
+  
 // alternative of $.select2
 JS.select2  
 
 // To set attributes
 JS.setAttr('selector', {attrName: value,..});
 
-// alternive of $.replaceWith
+// Alternive of $.replaceWith
 JS.replaceWith('selector', 'domStr');
 
 // To use $.wrap
@@ -66,6 +97,9 @@ JS.insert('selector', 'domStr', 'position like afterend');
 // Use object merge like $.extend
 JS.extend(obj1, obj2);
 
+// To get aueryString from object
+JS.param2Url(paramsObj);
+
 // Provide unique in array
 JS.unique(arrayData);
 
@@ -75,8 +109,14 @@ JS.parseDom('string');
 // To add script data or load from url
 JS.addScript(data, 'url');
 
+// To genrate css links
+JS.createLink(path);
+
 // To check target selector is present in base selector/dom
-JS.hasInall(selector, target)
+JS.hasInall(selector, target);
+
+// remove multiple Attribute of DOM
+JS.removeDomAttr(selector, attrArray);
 
 // To trigger events
 JS.trigger('eventName');
@@ -98,6 +138,9 @@ JS.nextElm(selector, search);
 
 // find in previous element
 JS.prevElm(selector, 'searchSelector');
+
+// To create element from string and set html from string
+JS.create(tagName, html);
 
 // To clone node 
 JS.clone('selector');
@@ -123,10 +166,6 @@ JS.offset(container);
 // To comapre two array
 JS.inArray(baseArray, compareArray);
 
-// Find target node into base node and some extra selectors and 
-// It also handle other action with data as {action: 'addClass',actionData: 'test'}
-JS.find(baseSelector, target, data );
-
 // To compare selector in base node
 JS.match(baseSelector, matchStr);
 
@@ -142,15 +181,15 @@ JS.isValid(data, filter = false)
 //To find inner child in dom
 JS.innerChild(node);
 ```
-### 2. Import dragble from JUI
+### 2. Import dragable from JUI
 ```
-// To enable dragble on dom 
-// Use drable="1" attribute where your want to denable dragging
-// Use dropzone="1" to define valid dropable doms.
- import {Dragable} from 'JUI';
+// To enable draggable  on dom 
+// Use dragable = "1" attribute where you want to enable dragging
+// Use dropzone = "1" to define valid dropable doms.
+ import { Draggable } from 'JUI';
 
  // you can use drag cycle to access your functions
- let dnd = new Dragable({
+ let dnd = new Draggable({
    onDrag:()=>{},
    onDragStart:()=>{},
    onDragEnter:()=>{},
@@ -161,12 +200,11 @@ JS.innerChild(node);
    onDrop:()=>{}
  })
 
-many other functions like that...
 ```
 ### 2. Import JStore from JUI
 ```
-// To web storage using JUI 
-// Use {session:"1"} in default option to use sessionStorage by default it will localStorage
+// To use web storage using JUI 
+// Use {session:"1"} in default option to use sessionStorage by default it will use localStorage
 
 import {JStore} from 'JUI';
 let hdd = new JStore({});

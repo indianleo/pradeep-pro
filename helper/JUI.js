@@ -1,7 +1,7 @@
 'use strict'
 /**
  * File: JUI.js
- * Description: Provide JQ alternative methods and Dragable
+ * Description: Provide JQ alternative methods and Draggable
  * Author: Pradeep Yadav
  * email: pradeepdv45@gmail.com
  */
@@ -21,6 +21,7 @@ export class API {
             isSocial: "false",
             clientId: "040MA"
         }
+        window.JUITemp = {};
     }
 
     validateApp (checkExpired) {
@@ -586,6 +587,7 @@ export default class JUI extends API{
                 reject(requestError);
             };
             if (sendData.onStart) request.onloadstart = sendData.onStart;
+            if (sendData.onEnd) request.onloadend = sendData.onEnd;
             request.send(longData);
         });
     }
@@ -1049,12 +1051,12 @@ export default class JUI extends API{
 
     // store data
     set(key, value) {
-        window.AI[key] = value;
+        window.JUITemp[key] = value;
     }
 
     // get data from store
     get(key) {
-        return window.AI[key];
+        return window.JUITemp[key];
     }
 
     // find caller
@@ -1111,7 +1113,7 @@ export default class JUI extends API{
     activate(loader) {
         document.querySelector('#activateLoaderContainer') && document.querySelector('#activateLoaderContainer').remove(); 
         if (loader > 0) {
-            AI.insert(document.body, `<div id="activateLoaderContainer" class="activateOverlay" style="z-index:9999999;"><center><div class="activator" style="height:100px; width: 100px;"></div></center></div>`, 'afterend');
+            this.insert(document.body, `<div id="activateLoaderContainer" class="activateOverlay" style="z-index:9999999;"><center><div class="activator" style="height:100px; width: 100px;"></div></center></div>`, 'afterend');
         }
     }
     
@@ -1179,11 +1181,15 @@ export default class JUI extends API{
             break;
             case 'value': selected.value = data.actionData;
             break;
+            case 'text': selected.textContent = data.actionData;
+            break;
             case 'checked':  selected.checked = data.actionData;
             break;
             case 'remove': selected.remove();
             break;
             case 'removeAttr': selected.removeAttribute(data.actionData);
+            break;
+            case 'css' : this.setCss(selected, data.actionData);
             break;
         }
     }
