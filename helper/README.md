@@ -6,8 +6,8 @@ Pure javascript based package, with no dependencies
 > The JUI package is build to provide alternative of jQuery features and dragables.
 > - Intregated JQ like features.
 > - JS based dragble feature.
-> - API calling and integartion methods using Ajax.
-> - And.. many other features :)
+> - API calling and integartion methods using Ajax (can overided servers).
+> - Tag view feature for input type text boxes
 
 
 
@@ -31,18 +31,17 @@ $ npm i javscript_helper
 ### 2. Import JUI.js from package
 ```
 /**
-* Default Export : 'JUI'
-* Dragable : 'Dragable feature'
-* API : 'class for api mthods (can overwrite)'
+* Modules : JUI (Default export), Dragable, JStore, API (need to overide servers inside)
 * construtor : accpet object as default options
 */
+
 // ID or DOM object
 import JUI from 'JUI';
-const JS = new JUI({});
+const JS = new JUI();
 
-//Syntax:
+//Syntax:- JS.select and JS.selectAll
 // action may be ['show', 'hide', 'toggleDisplay', 'addClass', 'removeClass' 
-// 'toggleClass', 'html', 'value', 'text', 'checked', 'remove', 'removeAttr' and 'css'].
+// 'toggleClass', 'html', 'value', 'text', 'checked', 'remove', 'removeAttr', 'attr' and 'css'].
 // actionData will be data which need to set on that action. It may be object or string depends upon action
 // Ex: css take object to set css on elements while html need string to set.
 JS.selectAll(selector, action, actionData);
@@ -52,12 +51,22 @@ JS.selectAll(selector, action, actionData);
 JS.selectAll('#test');
 // To set multiple classes
 JS.selectAll(".test", 'addClass', ['help', 'note']);
+// To remove multiple attributes
+JS.selectAll(".test", 'removeClass', ['help', 'note']);
 // To set single class
 JS.selectAll(".test", 'addClass', 'note');
+// To remove single class
+JS.selectAll(".test", 'removeClass', 'note');
+// To remove elements
+JS.selectAll(".test", 'remove');
 // To set innerHTML like $().html()
 JS.selectAll(".test", 'html', "<p>test html</p>');
 // To set multiple css on selected elements
 JS.selectAll(".test", 'css', {border: "1px solid red", color: '#fff'});
+// To set multiple Attribute on selected elements
+JS.selectAll(".test", 'attr', {zoom: 1, title: 'testing'});
+
+Note: JS.select do samething also but it only select first matched elements only
 
 // Find target node into base node and some extra selectors and 
 // It also handle other action with data as {action: 'addClass',actionData: 'test'}
@@ -69,6 +78,17 @@ JS.find(baseSelector, target, data );
  b) JS.find(baseSelector, targetSelector, 'checked')// to return all checked
  c) JS.find(baseSelector, targetSelector, {action:'html', actionData: 'hello user'}); // To set html in find elements.
  d) JS.find(baseSelector, targetSelector, {action:'css', actionData: {background: 'red'} }); // To set html in find elements.
+
+// To show alert
+JS.alert({title: "Warning", body: "Hello User"});
+                or
+JS.alert("Hello User");             
+
+// To eneable Tag view in input type text box
+a) add 'tagin' class in input type text
+b) call JS.addTagViewCss() to append css of tagView
+c) call to init tagView events JS.enableTagView({seprator: " "}) // 
+   - Default options are {separator|duplicate|transform|placeholder}
 
 // Alternative of $('baseSelector').on('eventName', 'targetSelector, function() {});
 JS.listen('baseSelector', 'eventName', 'targetSelector', (_this, event) {});
@@ -155,7 +175,25 @@ JS.empty(selector);
 JS.getBS(target, comp, options);
 
 // To use ajax i.e $.ajax
+// options:
+a) withUrl : true // To send queryStirng with url
+b) formData: true // To send formData directly in data ex: image upload
+c) by default : It take object in data and create formData inside
 JS.ajax(sendData);
+// Example:
+AH.ajax({
+        url: baseUrl + "forms.php?func=upload_screen_shots&ajax=1&source=paste&index=0", 
+        data: {
+            type: "data",
+            image: image
+        },
+    }).then((data)=> {
+        let parsedData = JSON.parse(data);
+        AH.select('[data-thumbnail ="'+ index +'"]').value = parsedData.url[0]['server'];
+    }).catch((e)=> {
+        JS.activate(0);
+        JS.alert('File is not processed successfully, Please upload all the files again!');
+    });
 
 // get script from url
 JS.getJSON(url);
@@ -184,7 +222,7 @@ JS.innerChild(node);
 ### 2. Import dragable from JUI
 ```
 // To enable draggable  on dom 
-// Use dragable = "1" attribute where you want to enable dragging
+// Use dragable = "1" or draggable = "true" attribute where you want to enable dragging
 // Use dropzone = "1" to define valid dropable doms.
  import { Draggable } from 'JUI';
 
@@ -199,6 +237,19 @@ JS.innerChild(node);
    onDrafOver:()=>{},
    onDrop:()=>{}
  })
+
+ // To enable dragable on custom DOMS
+ dnd.enableDrag('selector');
+
+ // To disable dragable on Custom DOMS
+ dnd.disableDrag('selector');
+
+ // To set Drag area for newly appended DOMS
+ dnd.setDrag(target)
+
+ // To set Drop area for newly appended DOMS
+ dnd.setDrop(target)
+
 
 ```
 ### 2. Import JStore from JUI

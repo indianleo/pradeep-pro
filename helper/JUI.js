@@ -6,6 +6,8 @@
  * email: pradeepdv45@gmail.com
  */
 
+ import TagsView from './TagView';
+ import tagViewCss from './css/tagViewCss';
 export class API {
     constructor(options) {
         this._servers = [
@@ -178,7 +180,6 @@ export class API {
         }
     }
 }
-
 export class JStore {
     constructor(options={}) {
         this._options = options;
@@ -303,9 +304,9 @@ export default class JUI extends API{
     }
 
     // Add script data or url into page
-    addScript(data, isUrl) {
+    addScript(data, url) {
         let sc = document.createElement("script");
-        if (isUrl) {
+        if (url) {
             sc.src = url;
             sc.async = true;
         } else {
@@ -321,6 +322,21 @@ export default class JUI extends API{
         link.href = path;
         link.rel = "stylesheet";
         document.head.append(link);
+    }
+
+    // To enable Tag view on selected inputs
+    // before use this call addTagViewCss once only
+    enableTagView(options) {
+        let selected = document.querySelectorAll('.tagin');
+        for (const el of selected) {
+            options ? TagsView(el, options) : TagsView(el);
+        }
+        return selected;
+    }
+
+    // Add css for tagsview inout
+    addTagViewCss() {
+        this.insert(document.head, `<style>${tagViewCss.style}</style>`, 'beforeend');
     }
 
     //check target selector is present in base selector/dom
@@ -403,11 +419,11 @@ export default class JUI extends API{
 
             while ( node ) {
                 if ( node !== current && node.nodeType === Node.ELEMENT_NODE ) {
-                if (search) {
-                        node.matches(search) ? result.push( node ) : "";
-                } else {
-                    result.push( node );
-                }
+                    if (search) {
+                            node.matches(search) ? result.push( node ) : "";
+                    } else {
+                        result.push( node );
+                    }
                 }
                 node = node.nextElementSibling || node.nextSibling;
             }
@@ -659,7 +675,7 @@ export default class JUI extends API{
 
     // Select all using query selectors and perform action both
     selectAll(selector, action, actionData) {
-        let selected = this.extraSelectors.includes(action) ?  this.selectAction(selector, action) : document.querySelectorAll(selector);
+        let selected = this.extraSelectors.includes(action) ?  this.selectAction(selector, action) : (typeof selector == 'object' ? selector : document.querySelectorAll(selector));
         if (selected && selected.length > 0 && action) {
             selected.forEach((elm)=> this.jsAction(elm, {action, actionData}));
         }
@@ -667,11 +683,15 @@ export default class JUI extends API{
     }
 
     // Select and enhance selector like jquery
-    select(selector, type) {
-        if (type) {
-            return this.selectAction(selector, type);
+    select(selector, action, actionData) {
+        if (this.extraSelectors.includes(action) ) {
+            return this.selectAction(selector, action);
         } else {
-            return document.querySelector(selector) || {};
+            selector = (typeof selector == 'object') ? selector : document.querySelector(selector);
+            if (selector) {
+                this.jsAction(selector, {action, actionData});
+            }
+            return  selector || {};
         }
     }
 
@@ -787,7 +807,7 @@ export default class JUI extends API{
         let selected = (typeof selector == "object") ? selector : document.querySelector(selector);
         if (selected) {
             let createdNode = this.templateHtml(domStr);
-            let innerNode = innerChild(createdNode);
+            let innerNode = this.innerChild(createdNode);
             innerNode.innerHTML = selected.outerHTML;
             selected.parentNode.replaceChild(createdNode, selected);
             return innerNode.firstChild;
@@ -1082,6 +1102,39 @@ export default class JUI extends API{
         }
     }
 
+    alert(msgData) {
+        let data = (typeof msgData == 'object') ? msgData : {body: msgData};
+        if (document.getElementById('showBSModal')) {
+            this.getBS("#showBSModal", 'Modal').show();
+            this.select("#showBSTitle").innerHTML = data.title || "";
+            this.select("#showBSBody").innerHTML = data.body || "No msg provided...";
+        } else {
+            this.insert(document.body, this.getModalHtml(data), 'beforeend');
+            this.getBS("#showBSModal", 'Modal').show();
+        }
+    }
+
+    getModalHtml(data) {
+        return(`
+            <div class="modal fade" id="showBSModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" id="showBSDialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="showBSTitle">${data.title || ""}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center fs-5" id="showBSBody">
+                            ${data.body}
+                        </div>
+                        <div class="modal-footer">
+                            ${data.footer ? '<button type="button" class="btn btn-secondary bg-primary" data-bs-dismiss="modal">OK</button>' : ""}
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        );
+    }
+
     // check data validity
     isValid(data, filter = false) {
         if (data && data != undefined && data != "" && data != "undefined" && data != null) {
@@ -1126,6 +1179,14 @@ export default class JUI extends API{
             // selector from the target element of the event
             handler.call(this, closest, event);
         }
+    }
+
+    isFocus(target) {
+        let selected = typeof target == 'object' ? target : document.querySelector(target);
+        if (selected == document.activeElement) {
+            return true;
+        }
+        return false;
     }
     
     // find inner child in dom
@@ -1191,6 +1252,8 @@ export default class JUI extends API{
             break;
             case 'css' : this.setCss(selected, data.actionData);
             break;
+            case 'attr': this.setAttr(selected, data.actionData);
+            break;
         }
     }
 } 
@@ -1208,8 +1271,6 @@ export class Draggable extends JUI {
             "dragstart": this.onDragStart.bind(this), 
             "drop": this.onDrop.bind(this),
         };
-        this.dragClass = options.dragClass || false;
-        this.dropClass = options.dropClass || false;
         this.init();
         this.currentDrag = "";
         this.dragState = true;
@@ -1218,14 +1279,42 @@ export class Draggable extends JUI {
     init() {
        for (let name in this.events) {
            if (this.events[name]) {
-                document.addEventListener(name, this.events[name], false);
+                document.removeEventListener(name, this.events[name], true);
+                document.addEventListener(name, this.events[name], true);
            }
        }
     }
 
+    setDrag(target) {
+        let selected = (typeof target == 'object') ? target : document.querySelector(target);
+        //selected.setAttribute('dragable', 1);
+        selected.setAttribute('draggable', true);
+    }
+
+    setDrop(target) {
+        let selected = (typeof target == 'object') ? target : document.querySelector(target);
+        selected.setAttribute('dropzone', 1);
+    }
+
+    disableDrag(target) {
+        let selected = (typeof target == 'object') ? target : document.querySelector(target);
+        if (selected) {
+            selected.removeAttribute(['dragable','draggable']);
+            selected.classList.remove('dragable')
+        }
+    }
+
+    enableDrag(target) {
+        let selected = (typeof target == 'object') ? target : document.querySelector(target);
+        if (selected) {
+            selected.setAttribute('dragable', 1);
+            selected.setAttribute('draggable', true);
+            selected.classList.add('dragable')
+        }
+    }
+
     //This event is fired when an element or text selection is being dragged.
     onDrag(event) {
-        //console.log("onDrag", event);
         // calling user defined function
         if (this.options.onDrag) this.options.onDrag(event);
     }
@@ -1241,8 +1330,7 @@ export class Draggable extends JUI {
     //This event is fired when a dragged element or text selection enters a valid drop target.
     onDragEnter(event) {
         // highlight potential drop target when the draggable element enters it
-        if ( this.dragState && (event.target.getAttribute('dropzone') || this.parent(event.target, "[dropzone]"))  ) {
-            //event.target.style.background = "purple";
+        if ( this.dragState && this.isValidDrop(event) ) {
             // calling user defined function
             if (this.options.onDragEnter) this.options.onDragEnter(event);
         }
@@ -1251,32 +1339,28 @@ export class Draggable extends JUI {
 
     //This event is fired when the user starts dragging an element or text selection.
     onDragStart(event) {
-        window.ev = event;
-        //console.log(event.dataTrasfer);
-        if (event.target.getAttribute('dragable') || this.parent(event.target, "[dragable]")) {
+        if (this.isValidDrag(event)) {
             this.dragState = true;
             // store a ref. on the dragged elem
             this.currentDrag = event.target;
             
             // make it half transparent
-            event.target.style.opacity = .5;
-           // event.dataTrasfer.dropEffect = 'all';
+            event.target.style.opacity = .2;
 
             // calling user defined function
             if (this.options.onDragStart) this.options.onDragStart(event);
         } else {
             this.dragState = false;
-            event.dataTrasfer.dropEffect = 'none'
+            //event.dataTrasfer.dropEffect = 'none'
         }
     }
 
     //This event is fired when a dragged element or text selection leaves a valid drop target.
     onDragLeave(event) {
         // reset background of potential drop target when the draggable element leaves it
-        if ( this.dragState && (event.target.getAttribute('dropzone') || this.parent(event.target, "[dropzone]"))  ) {
-            //event.target.style.background = "";
+        if ( this.dragState && this.isValidDrop(event) ) {
             // calling user defined function
-            if (this.options.onDragLeave) this.options.onDragLeave(event);
+            if (this.options.onDragLeave) this.options.onDragLeave(event, this.currentDrag);
         }
     }
 
@@ -1288,7 +1372,7 @@ export class Draggable extends JUI {
         event.preventDefault();
 
         // calling user defined function
-        if (this.options.onDragOver) this.options.onDragOver(event);
+        if (this.options.onDragOver) this.options.onDragOver(event, this.currentDrag);
     }
 
     //This event is fired when a drag operation is being ended (by releasing a mouse button or hitting the escape key)
@@ -1297,7 +1381,7 @@ export class Draggable extends JUI {
         event.target.style.opacity = "";
 
         // calling user defined function
-        if (this.options.onDragEnd) this.options.onDragEnd(event);
+        if (this.options.onDragEnd) this.options.onDragEnd(event, this.currentDrag);
     }
 
     //This event is fired when an element or text selection is dropped on a valid drop target.
@@ -1305,17 +1389,31 @@ export class Draggable extends JUI {
         // prevent default action (open as link for some elements)
         event.preventDefault();
         // move dragged elem to the selected drop target
-        if (this.dragState && (event.target.getAttribute('dropzone') || this.parent(event.target, "[dropzone]")) ) {
+        if (this.dragState && this.isValidDrop(event) ) {
             //event.target.style.background = "";
             if (this.options.remove) this.currentDrag.parentNode.removeChild( this.currentDrag );
-            if (this.options.copy) event.target.appendChild( this.currentDrag );
-            
+            if (this.options.copy) event.target.appendChild( this.currentDrag.cloneNode(true) );
             // calling user defined function
             if (this.options.onDrop) this.options.onDrop(event, this.currentDrag);
+            //.draggable('destroy');
         }
     }
 
+    isValidDrop(event) {
+        if (event.target.getAttribute('dropzone') || event.target.classList.contains('dropable') || this.parent(event.target, "[dropzone]") || this.parent(event.target, ".dropable") ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    isValidDrag(event) {
+        if (event.target.getAttribute('dragable') || event.target.getAttribute('draggable') || this.parent(event.target, "[dragable]")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
 
