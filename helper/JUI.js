@@ -246,7 +246,7 @@ export default class JUI extends API{
         this.trackInf = {};
         this.listener = {};
         this.buffer = {};
-        this.bsCat1 = ['Modal', 'Tooltip', 'Collapse', 'Popover', 'ScrollSpy', 'Tab'];
+        this.bsCat1 = ['Modal', 'Tooltip', 'Collapse', 'Popover', 'ScrollSpy', 'Tab', 'Alert'];
         this.extraSelectors = ['hidden', 'visible', 'selected', 'checked', 'enabled'];
         this.parseHtml = this.templateHtml.bind(this);
     }
@@ -1097,6 +1097,10 @@ export default class JUI extends API{
         } else {
             this.insert(document.body, this.getModalHtml(msg, 'Alert'), 'beforeend');
         }
+        setTimeout(()=> {
+            let alterRef= this.getBS(document.querySelector("#showMsgAlert"), 'Alert');
+            alterRef.close && alterRef.close();
+        }, time)
     }
 
     alert(msgData) {
@@ -1113,7 +1117,7 @@ export default class JUI extends API{
         switch(type) {
             case 'Alert' : 
                 return (`
-                    <div id="showMsgAlert" class="alert alert-warning alert-dismissible text-center fade show" role="alert" style="z-index:9999;min-height:50px;">
+                    <div id="showMsgAlert" class="alert alert-warning alert-dismissible text-center fade show" role="alert" style="z-index:9999;min-height:50px;position:fixed;width:100%;">
                         <span id="showMsgBody">${data}</span>
                         <button type="button" class="btn-close" style="margin-top: -3px;" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
