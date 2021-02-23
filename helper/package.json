@@ -1,6 +1,6 @@
 {
   "name": "javscript_helper",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Provide JQ alternative functions and features",
   "main": "JUI.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "tagging",
     "JUI",
     "ES6",
+    "jq alternative",
     "dragable",
     "vanila",
     "pradeep"
