@@ -518,6 +518,7 @@ export default class JUI extends API{
         if (selected) {
             while(selected.firstChild) selected.removeChild(selected.firstChild)
         }
+        return selected;
     }
 
     // Get bootstrap5 instance accoridng to compoenent
@@ -620,11 +621,12 @@ export default class JUI extends API{
         let rect = (typeof container == "object") ? container : document.querySelector(container);
         let offset = {rect};
         if (rect) {
-            rect = ClientRect.getBoundingClientRect();
+            let clientRect = rect.getBoundingClientRect();
             offset = { 
-                rect,
-                top: rect.top + window.scrollY, 
-                left: rect.left + window.scrollX, 
+                target: rect,
+                clientRect,
+                top: clientRect.top + window.scrollY, 
+                left: clientRect.left + window.scrollX, 
             };
         }
         
@@ -655,8 +657,8 @@ export default class JUI extends API{
             switch (typeAction) {
                 case 'all' : return base.querySelectorAll(target);
                 case 'child' : return base.querySelector(target).childNodes;
-                case 'hidden': return Array.prototype.filter.call(base.querySelectorAll(target), (elm)=> elm.hidden);
-                case 'visible': return Array.prototype.filter.call(base.querySelectorAll(target), (elm)=> !elm.hidden);
+                case 'hidden': return Array.prototype.filter.call(base.querySelectorAll(target), (elm)=> elm.offsetWidth == 0 && elm.offsetHeight == 0);
+                case 'visible': return Array.prototype.filter.call(base.querySelectorAll(target), (elm)=> elm.offsetWidth > 0 && elm.offsetHeight > 0);
                 case 'checked': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.checked);
                 case 'selected': return Array.prototype.filter.call(base.querySelectorAll(target), (elm)=> elm.selected);
                 case 'action': {
@@ -720,6 +722,7 @@ export default class JUI extends API{
     // Listen target with in base node listner
     listen(baseSelector, eventName, selector, handler) {
         let base = (typeof baseSelector == "object") ? baseSelector : document.querySelector(baseSelector);
+        if (!base) return false;
         if (this.listener[selector]) {
             base.removeEventListener(eventName, this.listener[selector]);
         }
@@ -1086,53 +1089,53 @@ export default class JUI extends API{
 
     // show warnign messages
     showmsg(msg, time = 10000) {
-        let errorAlert = document.querySelector("#errmsg");
+        let errorAlert = document.querySelector("#showMsgAlert");
         if (this.buffer['showmsg']) clearTimeout(this.buffer['showmsg']);
-        if (msg != "") {
-            errorAlert.classList.remove('h');
+        if (errorAlert) {
             errorAlert.classList.add('show');
-            errorAlert.innerHTML = msg;
-            this.buffer['showmsg'] = setTimeout(function() { 
-                errorAlert.classList.remove('show');
-                errorAlert.classList.add('h');
-            }, time);  
+            this.select("#showMsgBody").innerHTML = msg;
         } else {
-            errorAlert.classList.remove('show');
-            errorAlert.classList.add('h');
+            this.insert(document.body, this.getModalHtml(msg, 'Alert'), 'beforeend');
         }
     }
 
     alert(msgData) {
-        let data = (typeof msgData == 'object') ? msgData : {body: msgData};
         if (document.getElementById('showBSModal')) {
             this.getBS("#showBSModal", 'Modal').show();
-            this.select("#showBSTitle").innerHTML = data.title || "";
-            this.select("#showBSBody").innerHTML = data.body || "No msg provided...";
+            this.select("#showBSBody").innerHTML = msgData|| "No msg provided...";
         } else {
-            this.insert(document.body, this.getModalHtml(data), 'beforeend');
+            this.insert(document.body, this.getModalHtml(msgData, 'showBSModal'), 'beforeend');
             this.getBS("#showBSModal", 'Modal').show();
         }
     }
 
-    getModalHtml(data) {
-        return(`
-            <div class="modal fade" id="showBSModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" id="showBSDialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="showBSTitle">${data.title || ""}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-center fs-5" id="showBSBody">
-                            ${data.body}
-                        </div>
-                        <div class="modal-footer">
-                            ${data.footer ? '<button type="button" class="btn btn-secondary bg-primary" data-bs-dismiss="modal">OK</button>' : ""}
-                        </div>
+    getModalHtml(data, type) {
+        switch(type) {
+            case 'Alert' : 
+                return (`
+                    <div id="showMsgAlert" class="alert alert-warning alert-dismissible text-center fade show" role="alert" style="z-index:9999;min-height:50px;">
+                        <span id="showMsgBody">${data}</span>
+                        <button type="button" class="btn-close" style="margin-top: -3px;" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                </div>
-            </div>`
-        );
+                `)
+            case 'showBSModal':
+              return(`
+                    <div class="modal fade" id="showBSModal" tabindex="-1" aria-labelledby="Alert" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" id="showBSDialog">
+                            <div class="modal-content">
+                                <div class="modal-body text-center fs-5 pt-4" id="showBSBody">
+                                    ${data}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn bg-light m-auto text-dark" data-bs-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                );
+            default : "Nothing";
+        }
+
     }
 
     // check data validity
@@ -1214,8 +1217,8 @@ export default class JUI extends API{
     // action of selector
     selectAction(selector, type) {
         switch (type) {
-            case 'hidden': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.hidden);
-            case 'visible': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> !elm.hidden);
+            case 'hidden': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.offsetWidth == 0 && elm.offsetHeight == 0);
+            case 'visible': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.offsetWidth > 0 && elm.offsetHeight > 0);
             case 'selected': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.selected);
             case 'checked': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.checked);
             case 'enabled': return document.querySelectorAll(selector + ':not([disabled]');
