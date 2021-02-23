@@ -49,6 +49,10 @@ JS.selectAll(selector, action, actionData);
 // Use selector for class without anyother action.
 // This will return an array of found elements
 JS.selectAll('#test');
+// To get all selected visible elements
+JS.selectAll(".test", 'visible');
+// To get all selected hidden elements
+JS.selectAll(".test", 'hidden');
 // To set multiple classes
 JS.selectAll(".test", 'addClass', ['help', 'note']);
 // To remove multiple attributes
@@ -78,10 +82,9 @@ JS.find(baseSelector, target, data );
  b) JS.find(baseSelector, targetSelector, 'checked')// to return all checked
  c) JS.find(baseSelector, targetSelector, {action:'html', actionData: 'hello user'}); // To set html in find elements.
  d) JS.find(baseSelector, targetSelector, {action:'css', actionData: {background: 'red'} }); // To set html in find elements.
+ e) JS.find(baseSelector, targetSelector, 'visible') // to return all matched visible elements.
 
 // To show alert
-JS.alert({title: "Warning", body: "Hello User"});
-                or
 JS.alert("Hello User");             
 
 // To eneable Tag view in input type text box
