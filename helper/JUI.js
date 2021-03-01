@@ -244,11 +244,11 @@ export default class JUI extends API{
     constructor(options) {
         super();
         this.trackInf = {};
-        this.listener = {};
         this.buffer = {};
         this.bsCat1 = ['Modal', 'Tooltip', 'Collapse', 'Popover', 'ScrollSpy', 'Tab', 'Alert'];
         this.extraSelectors = ['hidden', 'visible', 'selected', 'checked', 'enabled'];
         this.parseHtml = this.templateHtml.bind(this);
+        window.eventTracker = window.eventTracker || {};
     }
 
     validate(isExpired) {
@@ -304,11 +304,14 @@ export default class JUI extends API{
     }
 
     // Add script data or url into page
-    addScript(data, url) {
+    addScript(data, url, callback) {
         let sc = document.createElement("script");
         if (url) {
             sc.src = url;
             sc.async = true;
+            sc.onload = function() { 
+                callback && callback();
+            }
         } else {
             sc.innerHTML = data;
         }
@@ -376,16 +379,20 @@ export default class JUI extends API{
     }
 
     // Find in childrent of selected node
-    findChild(selector, search) {
+    findChild(selector, search, action) {
         let current = (typeof selector == "object") ? selector : document.querySelector(selector);
         let list = current.children || [];
-        let found = {};
+        let found = [];
         if (search && list.length > 0) {
             let index = 0;
             while (list[index]) {
                 if (list[index].matches(search)) {
-                    found = list[index];
-                    break;
+                    if (action) {
+                        found.push(list[index]);
+                    } else {
+                        found = list[index];
+                        break;
+                    }
                 }
                 index++;
             }
@@ -393,6 +400,22 @@ export default class JUI extends API{
         } else {
             return list;
         }
+    }
+
+    closest(selector, search) {
+        let current = (typeof selector == "object") ? selector : document.querySelector(selector);
+        let elm = current.parentElement;
+        let result = [];
+        if (search) {
+            while (elm) {
+                if (this.find(elm, search)) {
+                    result = this.find(elm, search);
+                    break;
+                }
+                elm = elm.parentElement;
+            }
+        }
+        return result;
     }
 
     parent(selector, search) {
@@ -633,6 +656,16 @@ export default class JUI extends API{
         return offset;
     }
 
+    // find in array
+    findInArray(value, baseArray) {
+        let matched = [];
+        if (value && baseArray) {
+            return baseArray.find((item)=> item == value );
+        }
+
+        return false;
+    }
+
     // comapre two array
     inArray(baseArray, compareArray) {
         let matched = [];
@@ -723,11 +756,11 @@ export default class JUI extends API{
     listen(baseSelector, eventName, selector, handler) {
         let base = (typeof baseSelector == "object") ? baseSelector : document.querySelector(baseSelector);
         if (!base) return false;
-        if (this.listener[selector]) {
-            base.removeEventListener(eventName, this.listener[selector]);
+        if (window.eventTracker[selector]) {
+            base.removeEventListener(eventName, window.eventTracker[selector]);
         }
-        this.listener[selector] = this.onListen.bind(this, selector, handler, base);
-        base.addEventListener(eventName, this.listener[selector]);
+        window.eventTracker[selector] = this.onListen.bind(this, selector, handler, base);
+        base.addEventListener(eventName, window.eventTracker[selector]);
     }
 
     // remove node classes
@@ -762,6 +795,17 @@ export default class JUI extends API{
         if (found) {
             found.click();
         }
+    }
+
+    // Set dataset on element
+    setData(selector, attrs) {
+        let selected = (typeof selector == "object") ? selector : document.querySelector(selector);
+        if (selected) {
+            for (let property in attrs) {
+                selected.dataset[property] = attrs[property];
+            }
+        }
+        return selected || {};
     }
 
     // manage attr using object
@@ -1043,12 +1087,12 @@ export default class JUI extends API{
     }
     
     // watch if dom changes
-    watchDom(target, func) {
-        var observer = new MutationObserver(function (mutationRecords) {
+    watchDom(target, func, options={childList: true}) {
+        let observer = new MutationObserver(function (mutationRecords) {
                 //if (mutationRecords[0].addedNodes[0].nodeName === "SPAN")
                 func && func(mutationRecords);
             });
-        observer.observe(target, { attributes: true, childList: true, subtree: true });
+        observer.observe(target, options);
         return observer;
     }
 
@@ -1179,7 +1223,8 @@ export default class JUI extends API{
     
     // listner callback
     onListen(selector, handler, base, event) {
-        let closest = event.target.closest && event.target.closest(selector);
+        let target = event.target; //|| event.relatedTarget || event.toElement;
+        let closest = target.closest && target.closest(selector);
         if (closest && base.contains(closest)) {
             // passes the event to the handler and sets `this`
             // in the handler as the closest parent matching the
@@ -1261,6 +1306,7 @@ export default class JUI extends API{
             break;
             case 'attr': this.setAttr(selected, data.actionData);
             break;
+            case 'data': this.setData(selected, data.actionData);
         }
     }
 } 
