@@ -602,9 +602,11 @@ export default class JUI extends API{
             } else {
                 longData = new FormData();
                 for (let prop in sendData.data) {
-                    if (typeof sendData.data[prop] != 'object') {
+                    if (typeof sendData.data[prop] == 'object' && this.isValid(sendData.data[prop])) {
+                        longData = this.jsonFormEncode(longData, prop, sendData.data[prop]);
+                    } else {
                         longData.append(prop, sendData.data[prop]);
-                    }	
+                    }
                 }
             }
         }
@@ -630,6 +632,20 @@ export default class JUI extends API{
             if (sendData.onEnd) request.onloadend = sendData.onEnd;
             request.send(longData);
         });
+    }
+    
+    jsonFormEncode(formData, prop, jsonArray) {
+        try {
+            for (let i = 0; i < jsonArray.length; i++) {
+                for (let key in jsonArray[i]) {
+                  formData.append(`${prop}[${i}][${key}]`, jsonArray[i][key])
+                }
+            }
+        } catch(error) {
+            console.warn("Please provide valid JSON Object in ajax data.");
+        }
+
+        return formData;
     }
 
     // get script from url
@@ -1313,6 +1329,7 @@ export default class JUI extends API{
 export class Draggable extends JUI {
     constructor(options) {
         super();
+        console.log(options);
         this.options = options || {};
         this.events = {
             "drag" : this.onDrag.bind(this), 
