@@ -23,7 +23,6 @@ export class API {
             isSocial: "false",
             clientId: "040MA"
         }
-        window.JUITemp = {};
     }
 
     validateApp (checkExpired) {
@@ -248,7 +247,18 @@ export default class JUI extends API{
         this.bsCat1 = ['Modal', 'Tooltip', 'Collapse', 'Popover', 'ScrollSpy', 'Tab', 'Alert'];
         this.extraSelectors = ['hidden', 'visible', 'selected', 'checked', 'enabled'];
         this.parseHtml = this.templateHtml.bind(this);
-        window.eventTracker = window.eventTracker || {};
+        this.isSSDloaded = "";
+        this.loadSSD();
+    }
+
+    loadSSD() {
+        this.isSSDloaded = setInterval(()=> {
+            if (typeof window == 'object') {
+                window.eventTracker = window.eventTracker || {};
+                window.JUITemp = {};
+                clearInterval(this.isSSDloaded);
+            }
+        }, 1000);
     }
 
     validate(isExpired) {
@@ -606,7 +616,7 @@ export default class JUI extends API{
                         longData = this.jsonFormEncode(longData, prop, sendData.data[prop]);
                     } else {
                         longData.append(prop, sendData.data[prop]);
-                    }
+                    }	
                 }
             }
         }
@@ -633,7 +643,7 @@ export default class JUI extends API{
             request.send(longData);
         });
     }
-    
+
     jsonFormEncode(formData, prop, jsonArray) {
         try {
             for (let i = 0; i < jsonArray.length; i++) {
@@ -1000,7 +1010,8 @@ export default class JUI extends API{
     }
 
     // return querystring as object
-    url(url = window.location.href) {
+    url (url) {
+        url = url || (typeof window == 'object' ? window.location.href : "")
         return new URLSearchParams(url);
     }
 
@@ -1134,7 +1145,7 @@ export default class JUI extends API{
 
     // store data
     set(key, value) {
-        window.JUITemp[key] = value;
+        if (typeof window == 'object') window.JUITemp[key] = value;
     }
 
     // get data from store
@@ -1329,7 +1340,6 @@ export default class JUI extends API{
 export class Draggable extends JUI {
     constructor(options) {
         super();
-        console.log(options);
         this.options = options || {};
         this.events = {
             "drag" : this.onDrag.bind(this), 
