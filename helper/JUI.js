@@ -258,7 +258,7 @@ export default class JUI extends API{
                 window.JUITemp = {};
                 clearInterval(this.isSSDloaded);
             }
-        }, 1000);
+        }, 100);
     }
 
     validate(isExpired) {
