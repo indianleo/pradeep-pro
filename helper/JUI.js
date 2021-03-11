@@ -319,6 +319,9 @@ export default class JUI extends API{
         if (url) {
             sc.src = url;
             sc.async = true;
+            sc.onload = function() { 
+                options.callback();
+            }
         } else {
             sc.innerHTML = data;
         }
