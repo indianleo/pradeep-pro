@@ -581,11 +581,15 @@ export default class JUI extends API{
     }
 
     // Enable all mathced node's bootstrap5 compoenent
-    enableBsAll(selector, comp) {
+    enableBsAll(selector, comp, options) {
         if (this.bsCat1.includes(comp)) {
             let triggerList = [].slice.call(document.querySelectorAll(selector));
             let fireList = triggerList.map(function (triggerElm) {
-                return new bootstrap[comp](triggerElm)
+                if (options) {
+                    return new bootstrap[comp](triggerElm, options);
+                } else {
+                    return new bootstrap[comp](triggerElm)
+                }
             })
             return fireList;
         } else {
