@@ -252,13 +252,18 @@ export default class JUI extends API{
     }
 
     loadSSD() {
-        this.isSSDloaded = setInterval(()=> {
-            if (typeof window == 'object') {
-                window.eventTracker = window.eventTracker || {};
-                window.JUITemp = {};
-                clearInterval(this.isSSDloaded);
-            }
-        }, 100);
+        if (typeof window == 'object') {
+            window.eventTracker = window.eventTracker || {};
+            window.JUITemp = {};
+        } else {
+            this.isSSDloaded = setInterval(()=> {
+                if (typeof window == 'object') {
+                    window.eventTracker = window.eventTracker || {};
+                    window.JUITemp = {};
+                    clearInterval(this.isSSDloaded);
+                }
+            }, 500);
+        }   
     }
 
     validate(isExpired) {
