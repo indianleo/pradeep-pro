@@ -314,27 +314,34 @@ export default class JUI extends API{
     }
 
     // Add script data or url into page
-    addScript(data, url, callback) {
+    addScript(data, url, options={}) {
         let sc = document.createElement("script");
         if (url) {
             sc.src = url;
             sc.async = true;
-            sc.onload = function() { 
-                callback && callback();
-            }
         } else {
             sc.innerHTML = data;
         }
-        document.head.append(sc);
+        let selector = options.target ? document.body : document.head;
+        selector.append(sc);
         return sc;
     }
 
     // used to genrate css links
-    createLink(path) {
+    createLink(path, options={}) {
         let link = document.createElement('link')
+        let selector = options.target ? document.body : document.head;
         link.href = path;
-        link.rel = "stylesheet";
-        document.head.append(link);
+        if  (options.preload ) {
+            link.rel = "preload";
+            link.onload = `this.rel='${options.type || "stylesheet"}'`;
+            link.as = options.as || "style";
+            link.crossorigin = "anonymous";
+        } else {
+            link.rel = "stylesheet";
+        }
+        selector.append(link);
+        return link;
     }
 
     // To enable Tag view on selected inputs
