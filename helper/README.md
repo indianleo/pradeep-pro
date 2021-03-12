@@ -23,6 +23,8 @@ Pure javascript based package, with no dependencies
 $ npm install javscript_helper --save
 or
 $ npm i javscript_helper
+To Update:
+npm i javscript_helper@latest
 ```
 
 ## Getting Started
