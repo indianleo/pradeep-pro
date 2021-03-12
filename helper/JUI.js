@@ -429,7 +429,7 @@ export default class JUI extends API{
 
     closest(selector, search) {
         let current = (typeof selector == "object") ? selector : document.querySelector(selector);
-        let elm = current.parentElement;
+        let elm = current ? current.parentElement : null;
         let result = [];
         if (search) {
             while (elm) {
