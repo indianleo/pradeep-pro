@@ -445,7 +445,7 @@ export default class JUI extends API{
 
     parent(selector, search) {
         let current = (typeof selector == "object") ? selector : document.querySelector(selector);
-        let elm = current.parentElement;
+        let elm = current ? current.parentElement : null;
         if (search) {
             while(elm) {
                 if (elm.matches(search)) {
