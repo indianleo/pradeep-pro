@@ -340,7 +340,7 @@ export default class JUI extends API{
         let link = document.createElement('link')
         let selector = options.target ? document.body : document.head;
         link.href = path;
-        if  (options.preload ) {
+        if  (options.preload) {
             link.rel = "preload";
             link.onload = `this.rel='${options.type || "stylesheet"}'`;
             link.as = options.as || "style";
@@ -978,14 +978,6 @@ export default class JUI extends API{
         } else {
             return [];
         }
-    }
-
-    // added the stylesheet in head
-    createLink (path) {
-        let link = document.createElement('link')
-        link.href = path;
-        link.rel = "stylesheet";
-        document.head.append(link);
     }
 
     // merge two object like $.extend
