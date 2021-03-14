@@ -1324,7 +1324,7 @@ export default class JUI extends API{
     // handle inline actions of js
     jsAction(selected, data) {
         switch(data.action) {
-            case 'show': selected.style.display = "block";
+            case 'show': selected.style.display = data.actionData || "";
             break;
             case 'hide': selected.style.display = "none";
             break;
