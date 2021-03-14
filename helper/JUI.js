@@ -342,7 +342,9 @@ export default class JUI extends API{
         link.href = path;
         if  (options.preload) {
             link.rel = "preload";
-            link.onload = `this.rel='${options.type || "stylesheet"}'`;
+            link.onload = function() {
+                this.rel= options.type || "stylesheet";
+            };
             link.as = options.as || "style";
             link.crossorigin = "anonymous";
         } else {

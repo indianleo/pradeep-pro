@@ -1,6 +1,6 @@
 {
   "name": "javscript_helper",
-  "version": "1.0.23",
+  "version": "1.0.25",
   "description": "Provide JQ alternative functions and features",
   "main": "JUI.js",
   "scripts": {
