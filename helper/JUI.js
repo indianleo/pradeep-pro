@@ -757,16 +757,23 @@ export default class JUI extends API{
 
     // Select all using query selectors and perform action both
     selectAll(selector, action, actionData) {
-        let selected = this.extraSelectors.includes(action) ?  this.selectAction(selector, action) : (typeof selector == 'object' ? selector : document.querySelectorAll(selector));
+        let selected = this.isExtraSelectors(action, actionData) ?  this.selectAction(selector, action) : (typeof selector == 'object' ? selector : document.querySelectorAll(selector));
         if (selected && selected.length > 0 && action) {
             selected.forEach((elm)=> this.jsAction(elm, {action, actionData}));
         }
         return selected;
     }
 
+    isExtraSelectors(action, actionData) {
+        if (this.extraSelectors.includes(action)) {
+            return (action == "checked" && actionData) ? false : true;
+        }
+        return false;
+    }
+
     // Select and enhance selector like jquery
     select(selector, action, actionData) {
-        if (this.extraSelectors.includes(action) ) {
+        if (this.isExtraSelectors(action, actionData)) {
             return this.selectAction(selector, action);
         } else {
             selector = (typeof selector == 'object') ? selector : document.querySelector(selector);
