@@ -766,7 +766,7 @@ export default class JUI extends API{
 
     isExtraSelectors(action, actionData) {
         if (this.extraSelectors.includes(action)) {
-            return (action == "checked" && actionData) ? false : true;
+            return (action == "checked" && typeof actionData != 'undefined') ? false : true;
         }
         return false;
     }
