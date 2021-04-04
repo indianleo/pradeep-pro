@@ -10,6 +10,7 @@ export class Server {
     private httpServer:HTTPServer;
     private app:Application;
     private io:Socket;
+    private activeSockets: string[] = [];
     
     constructor() {
         this.initialize();
@@ -37,6 +38,19 @@ export class Server {
     private handleSocketConnection(): void {
         this.io.on("connection", socket => {
             console.log("Socket connected.");
+
+            socket.on("call-user", data => {
+                socket.to(data.to).emit("call-made", {
+                    offer: data.offer,
+                    socket: socket.id
+                });
+            });
+            socket.on("make-answer", data => {
+                socket.to(data.to).emit("answer-made", {
+                  socket: socket.id,
+                  answer: data.answer
+                });
+            });
         });
     }
       

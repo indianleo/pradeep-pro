@@ -47,7 +47,7 @@ export class API {
                 reject(requestError);
             };
             if (checkExpired) {
-                request.setRequestHeader("old-access-token", window.apiAccessToken);
+                request.setRequestHeader("old-access-token", globalThis.apiAccessToken);
             }
             request.send();
         });
@@ -141,7 +141,7 @@ export class API {
             }
         };
         if (!data.includes('no_access_token_required')) {
-            request.setRequestHeader("access-token", window.apiAccessToken);
+            request.setRequestHeader("access-token", globalThis.apiAccessToken);
         }
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader("Access-Control-Allow-Origin", "*");
@@ -172,7 +172,7 @@ export class API {
     
     setAccessKey (api) {
         if (api.access_token && api.access_token.length > 50) {
-            window.apiAccessToken = api.access_token;
+            globalThis.apiAccessToken = api.access_token;
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem('apiAccessToken', api.access_token);
             }
@@ -252,14 +252,14 @@ export default class JUI extends API{
     }
 
     loadSSD() {
-        if (typeof window == 'object') {
-            window.eventTracker = window.eventTracker || {};
-            window.JUITemp = {};
+        if (typeof globalThis == 'object') {
+            globalThis.eventTracker = globalThis.eventTracker || {};
+            globalThis.JUITemp = globalThis.JUITemp || {};
         } else {
             this.isSSDloaded = setInterval(()=> {
-                if (typeof window == 'object') {
-                    window.eventTracker = window.eventTracker || {};
-                    window.JUITemp = {};
+                if (typeof globalThis == 'object') {
+                    globalThis.eventTracker = globalThis.eventTracker || {};
+                    globalThis.JUITemp = globalThis.JUITemp || {};
                     clearInterval(this.isSSDloaded);
                 }
             }, 500);
@@ -810,11 +810,11 @@ export default class JUI extends API{
     listen(baseSelector, eventName, selector, handler) {
         let base = (typeof baseSelector == "object") ? baseSelector : document.querySelector(baseSelector);
         if (!base) return false;
-        if (window.eventTracker[selector]) {
-            base.removeEventListener(eventName, window.eventTracker[selector]);
+        if (globalThis.eventTracker[selector]) {
+            base.removeEventListener(eventName, globalThis.eventTracker[selector]);
         }
-        window.eventTracker[selector] = this.onListen.bind(this, selector, handler, base);
-        base.addEventListener(eventName, window.eventTracker[selector]);
+        globalThis.eventTracker[selector] = this.onListen.bind(this, selector, handler, base);
+        base.addEventListener(eventName, globalThis.eventTracker[selector]);
     }
 
     // remove node classes
@@ -1052,7 +1052,7 @@ export default class JUI extends API{
     }
 
     setApiKey(token) {
-        window.apiAccessToken = token;
+        globalThis.apiAccessToken = token;
     }
 
     validateAjaxData(ajaxData, subtype) {
@@ -1165,12 +1165,12 @@ export default class JUI extends API{
 
     // store data
     set(key, value) {
-        if (typeof window == 'object') window.JUITemp[key] = value;
+        if (typeof globalThis == 'object') globalThis.JUITemp[key] = value;
     }
 
     // get data from store
     get(key) {
-        return window.JUITemp[key];
+        return globalThis.JUITemp[key];
     }
 
     // find caller
