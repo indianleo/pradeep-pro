@@ -608,10 +608,12 @@ export default class JUI extends API{
     }
 
     // Hide enabled bootstrap5 compoenents
-    hideBsAll(fireList, comp) {
+    hideBsAll(selector, comp) {
+        let fireList = [].slice.call(document.querySelectorAll(selector));
         if (this.bsCat1.includes(comp)) {
             fireList.forEach(function (elm) {
-                elm.hide();
+                let ref = bootstrap[comp].getInstance(elm);
+                ref?.hide?.();
             })
         } else {
             console.error("Bootstrap can't disable for this component name");
