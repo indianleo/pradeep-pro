@@ -884,6 +884,12 @@ export default class JUI extends API{
         return selected || {};
     }
 
+    // Set dataset on element
+    getData(selector, attr) {
+        let selected = (typeof selector == "object") ? selector : document.querySelector(selector);
+        return selected?.dataset[attr] || {};
+    }
+
     // manage attr using object
     setAttr(selector, attrs) {
         let selected = (typeof selector == "object") ? selector : document.querySelector(selector);
@@ -1376,6 +1382,9 @@ export default class JUI extends API{
             case 'attr': this.setAttr(selected, data.actionData);
             break;
             case 'data': this.setData(selected, data.actionData);
+            break;
+            case 'getData': this.getData(selected, data.actionData);
+            break;
         }
     }
 } 
