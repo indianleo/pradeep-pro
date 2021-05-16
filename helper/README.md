@@ -86,6 +86,9 @@ JS.find(baseSelector, target, data );
  d) JS.find(baseSelector, targetSelector, {action:'css', actionData: {background: 'red'} }); // To set html in find elements.
  e) JS.find(baseSelector, targetSelector, 'visible') // to return all matched visible elements.
 
+// To get all attributes of array of selected node and use second argument to return filter by this tag only.
+JS.serializeArray(JS.find('body','span,p', 'visible'),'span');
+
 // To show alert
 JS.alert("Hello User");             
 
@@ -206,6 +209,9 @@ JS.getJSON(url);
 // $.offset alternative
 JS.offset(container);
 
+//To find any value in an Array
+JS.findInArray(value, baseArray);
+
 // To comapre two array
 JS.inArray(baseArray, compareArray);
 
@@ -282,6 +288,6 @@ hdd.clearAll();
 ```
 
 ## License
-javascript is opensource package.
+javscript_helper is opensource package.
 
 for request feaures and suggestions please report issues.

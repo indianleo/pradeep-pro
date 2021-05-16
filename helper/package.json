@@ -1,6 +1,6 @@
 {
   "name": "javscript_helper",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "Provide JQ alternative functions and features",
   "main": "JUI.js",
   "scripts": {
@@ -20,9 +20,11 @@
     "JUI",
     "ES6",
     "jq alternative",
-    "dragable",
+    "draggable",
     "vanila",
-    "pradeep"
+    "pradeep yadav",
+    "js library",
+    "javascript helper"
   ],
   "author": "Pradeep Yadav",
   "license": "ISC",

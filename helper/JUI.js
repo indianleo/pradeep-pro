@@ -733,6 +733,24 @@ export default class JUI extends API{
         return matched.length > 0 ? matched.length : -1;
     }
 
+    // serialize nodes into array
+    serializeArray(nodeArr, filter) {
+        let result = [];
+        nodeArr.forEach((item)=> {
+            if (!filter || item.matches(filter)) {
+                console.log(item.attributes.length);
+                if (item.attributes.length > 0) {
+                    let tempData = {};
+                    for (let _attr of item.attributes) {
+                        tempData[_attr.name] = _attr.value;
+                    }
+                    result.push(tempData);
+                }
+            }
+        })
+        return result;
+    }
+
     // Find target node into base node and some extra selectors
     find(baseSelector, target, data ) {
         let base = (typeof baseSelector == "object") ? baseSelector : document.querySelector(baseSelector);
