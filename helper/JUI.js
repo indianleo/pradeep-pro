@@ -245,7 +245,7 @@ export default class JUI extends API{
         this.trackInf = {};
         this.buffer = {};
         this.bsCat1 = ['Modal', 'Tooltip', 'Collapse', 'Popover', 'ScrollSpy', 'Tab', 'Alert'];
-        this.extraSelectors = ['hidden', 'visible', 'selected', 'checked', 'enabled'];
+        this.extraSelectors = ['hidden', 'visible', 'selected', 'checked', 'enabled', 'children', 'childNodes'];
         this.parseHtml = this.templateHtml.bind(this);
         this.isSSDloaded = "";
         this.loadSSD();
@@ -779,7 +779,7 @@ export default class JUI extends API{
 
     // Select all using query selectors and perform action both
     selectAll(selector, action, actionData) {
-        let selected = this.isExtraSelectors(action, actionData) ?  this.selectAction(selector, action) : (typeof selector == 'object' ? selector : document.querySelectorAll(selector));
+        let selected = this.isExtraSelectors(action, actionData) ? this.selectAction(selector, action) : (typeof selector == 'object' ? selector : document.querySelectorAll(selector));
         if (selected && selected.length > 0 && action) {
             Array.prototype.forEach.call(selected, (elm)=> this.jsAction(elm, {action, actionData}));
         }
@@ -1339,6 +1339,8 @@ export default class JUI extends API{
             case 'selected': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.selected);
             case 'checked': return Array.prototype.filter.call(document.querySelectorAll(selector), (elm)=> elm.checked);
             case 'enabled': return document.querySelectorAll(selector + ':not([disabled]');
+            case 'children': return document.querySelector(selector).children;
+            case 'childNodes': return document.querySelector(selector).childNodes;
             default: return document.querySelector(selector);  
         }
     }
