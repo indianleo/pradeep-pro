@@ -376,7 +376,7 @@ export default class JUI extends API{
         let current = (typeof selector == "object") ? selector : document.querySelectorAll(selector);
         let result = [];
         if (current) {
-            current.forEach((item)=> {
+            Array.prototype.forEach.call(current, (item)=> {
                 if (item.contains(target)) {
                     result.push(item);
                 }
@@ -389,7 +389,7 @@ export default class JUI extends API{
     removeDomAttr(selector, attrArray) {
         let current = (typeof selector == "object") ? selector : document.querySelector(selector);
         if (current) {
-            attrArray.forEach((attr)=> {
+            Array.prototype.forEach.call(attrArray, (attr)=> {
                 current.removeAttribute(attr);
             });
         }
@@ -781,7 +781,7 @@ export default class JUI extends API{
     selectAll(selector, action, actionData) {
         let selected = this.isExtraSelectors(action, actionData) ?  this.selectAction(selector, action) : (typeof selector == 'object' ? selector : document.querySelectorAll(selector));
         if (selected && selected.length > 0 && action) {
-            selected.forEach((elm)=> this.jsAction(elm, {action, actionData}));
+            Array.prototype.forEach.call(selected, (elm)=> this.jsAction(elm, {action, actionData}));
         }
         return selected;
     }
@@ -843,7 +843,7 @@ export default class JUI extends API{
     removeClass(selector, name) {
         let selected = (typeof selector == "object") ? selector : document.querySelectorAll(selector);
         if (selected && selected.length > 0) {
-            selected.forEach((elm)=> this.jsAction(elm, {action: 'removeClass', actionData: name}) );
+            Array.prototype.forEach.call(selected, (elm)=> this.jsAction(elm, {action: 'removeClass', actionData: name}));
         }
         return selected || {};
     }
@@ -851,7 +851,7 @@ export default class JUI extends API{
     addClass(selector, name) {
         let selected = (typeof selector == "object") ? selector : document.querySelectorAll(selector);
         if (selected && selected.length > 0) {
-            selected.forEach((elm)=> this.jsAction(elm, {action: 'addClass', actionData: name}) );
+            Array.prototype.forEach.call(selected, (elm)=> this.jsAction(elm, {action: 'addClass', actionData: name}));
         }
         return selected || {};
     }
@@ -860,7 +860,7 @@ export default class JUI extends API{
     toggleDom(dom, action="toggleDisplay") {
         let selected =  typeof dom == "object" ? dom : document.querySelectorAll(dom);
         if (selected && selected.length > 0) {
-            selected.forEach((elm)=> this.jsAction(elm, {action}));
+            Array.prototype.forEach.call(selected, (elm)=> this.jsAction(elm, {action}) );
         }
         return selected || {};
     }
@@ -916,7 +916,7 @@ export default class JUI extends API{
     remove(dom) {
         let selected =  document.querySelectorAll(dom);
         if (selected.length > 0) {
-            selected.forEach((elm)=> elm.remove());
+            Array.prototype.forEach.call(selected, (elm)=> elm.remove() );
         }
     }
 
@@ -959,7 +959,6 @@ export default class JUI extends API{
         if (newNode && existingNode) {
             existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
         }
-
         return newNode;
     }
 
@@ -987,7 +986,7 @@ export default class JUI extends API{
         if (selected) {
             return Array.from( selected.parentNode.children ).indexOf( selected );
         } else {
-            retunr -1;
+            return -1;
         }
     }
 
@@ -996,7 +995,7 @@ export default class JUI extends API{
         let base = (typeof baseSelector == "object") ? baseSelector : document.querySelector(baseSelector);
         let matched = [];
         if (base && base.length > 0 ) {
-            base.forEach((elm)=> {
+            Array.prototype.forEach.call(base, (elm)=> {
                 if (elm.matches(mathStr)) matched.push(elm);
             });
         } else {
@@ -1007,7 +1006,7 @@ export default class JUI extends API{
 
     // check selector in base node
     contains(selector, text) {
-        var elements = (typeof selector == "object") ? selector : document.querySelectorAll(selector);
+        let elements = (typeof selector == "object") ? selector : document.querySelectorAll(selector);
         if (elements && elements.length > 0) {
             return [].filter.call(elements, function(element) {
                 return RegExp(text).test(element.textContent);
@@ -1021,21 +1020,18 @@ export default class JUI extends API{
     extend() {
         //This function are alternative of $.extend which merge content of objects into first one
         // To create deep copy pass true as first argument
-        // Variables
-        var extended = {};
-        var deep = false;
-        var i = 0;
-        var length = arguments.length;
-    
+        let extended = {};
+        let deep = false;
+        let i = 0;
+        let length = arguments.length;
         // Check if a deep merge
         if ( Object.prototype.toString.call( arguments[0] ) === '[object Boolean]' ) {
             deep = arguments[0];
             i++;
         }
-    
         // Merge the object into the extended object
-        var merge = function (obj) {
-            for ( var prop in obj ) {
+        const merge = function (obj) {
+            for ( let prop in obj ) {
                 if ( Object.prototype.hasOwnProperty.call( obj, prop ) ) {
                     // If deep merge and property is an object, merge properties
                     if ( deep && Object.prototype.toString.call(obj[prop]) === '[object Object]' ) {
@@ -1046,15 +1042,12 @@ export default class JUI extends API{
                 }
             }
         };
-    
         // Loop through each object and conduct a merge
         for ( ; i < length; i++ ) {
-            var obj = arguments[i];
+            let obj = arguments[i];
             merge(obj);
         }
-    
         return extended;
-    
     }
 
     // return querystring as object
@@ -1256,7 +1249,7 @@ export default class JUI extends API{
                         </div>
                     </div>`
                 );
-            default : "Nothing";
+            default : return "<div>Nothing</div>";
         }
 
     }
