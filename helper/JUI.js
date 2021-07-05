@@ -8,177 +8,7 @@
 
  import TagsView from './TagView';
  import tagViewCss from './css/tagViewCss';
-export class API {
-    constructor(options) {
-        this._servers = [
-            'http://localhost/pe-gold3/', 
-            'https://www.ucertify.com/', 
-            'https://www.jigyaasa.info/',
-            'http://172.10.195.203/pe-gold3/',
-        ];
-        this._REMOTE_API_URL = this._servers[1] + 'pe-api/1/index.php';
-        this._client = {
-            email: "pradeep.yadav@ucertify.com",
-            password: "786pradeep",
-            isSocial: "false",
-            clientId: "040MA"
-        }
-    }
 
-    validateApp (checkExpired) {
-        return new Promise((resolve, reject) => {
-            let isExpired = checkExpired ? `&action=refresh_token&refresh_token=1` : "";
-            let isSocial = this._client.isSocial ? '&social_login=1' : "";
-            let url = `${this._REMOTE_API_URL}?func=cat2.authenticate&device_id=${this._client.clientId}&email=${this._client.email}&password=${this._client.password + isSocial + isExpired}`;
-            let request = new XMLHttpRequest();
-            request.open('POST', url, true);
-            request.onreadystatechange = (event) => {
-                if (request.readyState == 4 && request.status === 200) {
-                    try {
-                        let responseBody = request.responseText;
-                        let responseObject = responseBody.match(/<jsonstring>(.*?)<\/jsonstring>/);
-                        resolve(JSON.parse(responseObject[1]));
-                    } catch (err) {
-                        reject(err);
-                    }
-                } 
-            };
-            request.onerror = (requestError) => {
-                reject(requestError);
-            };
-            if (checkExpired) {
-                request.setRequestHeader("old-access-token", globalThis.apiAccessToken);
-            }
-            request.send();
-        });
-    }
-    
-    getAPIDataJ (func, where, callback = function(){}) {
-        let param = "";
-        let message = true;
-        let _param2 = {};
-        let str = '';
-        let ajax_info = where.ajax_info ||{};
-        where = this._assignPartial(where, {}, 'ajax_info', true);
-        // if (typeof where.redis == 'undefined') {
-        // 	_param2.redis = 0;
-        // }
-        //----------- code for acces_token based validation --------//
-        _param2.device_id = this._client.clientId;
-        //----------------------------------------------------------//
-    
-        if (typeof (where) == 'object') {
-            for (let k in where) {
-                if (typeof where[k] != 'object') {
-                    param += "&" + k + "=" + where[k];
-                }	
-            }
-        }
-        if (typeof (func) !== "undefined" && func != "") {
-            for (let k in _param2) {
-                if (typeof _param2[k] != 'object') {
-                    str += "&" + k + "=" + _param2[k];
-                }	
-            }
-            str += "&func="+func;
-        }
-        
-        this.getAPIDataJSON(this._REMOTE_API_URL + "?" + str + "&debug=0&"+param, param, ajax_info, (apidata)=> {
-            if (apidata == 'Expired'){
-                this.getAPIDataJ(func, where, callback);
-            } else {
-                callback(apidata);
-            }
-        }, func);
-    }
-    
-    getAPIDataJSON (url, data, ajax_info, callback = function(){}, funcName) {
-        let request = new XMLHttpRequest();
-        request.open('POST', url, true);
-        request.onreadystatechange = (event) => {
-            if (request.readyState == 4 && request.status === 200) {
-                let responseBody = request.responseText;
-                let responseData = {};
-                try {
-                    let resStr = responseBody.match(/<jsonstring>(.*?)<\/jsonstring>/);
-                    if (resStr[1] != '') {
-                        let responseObject = JSON.parse(resStr[1]);
-                        if (responseObject.error && ['Expired', '-9'].includes(responseObject.error.error_id)) {
-                            console.log("Api Error = ", responseObject.error.error_id);
-                            this.validateApp (responseObject.error.error_id != -9).then((validRes) => {
-                                if (validRes.status == 'Success') {
-                                    this.setAccessKey(validRes);
-                                    callback("Expired");
-                                }
-                            }).catch((validateError)=> {
-                                //UI.storeError('Validate Error####no1:1####' + JSON.stringify(validateError || {}), true)
-                                console.log(validateError);
-                            });
-                            return;
-                        } else {
-                            if (responseObject['response']) {
-                                responseData = responseObject['response'];
-                                console.warn("Api data J reponse <-- Received -->", responseObject);
-                            } else if(responseObject['response'] == undefined && responseObject.error == undefined) {
-                                responseData = responseObject;
-                                console.warn("Api data J reponse <-- Received II-->", responseData);
-                            } else {
-                                responseData = undefined;
-                                console.warn({"Response_error":responseObject.error});
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.warn("Please check your Internet connection.");
-                    console.log("Api data error = ", responseBody);
-                    if (data.includes('must_reply_override')) {
-                        responseData = undefined;
-                    } else {
-                        return (0);
-                    }
-                }
-                callback(responseData);
-            }
-        };
-        if (!data.includes('no_access_token_required')) {
-            request.setRequestHeader("access-token", globalThis.apiAccessToken);
-        }
-        request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader("Access-Control-Allow-Origin", "*");
-        request.setRequestHeader("Access-Control-Allow-Headers", "*");
-        request.send();
-    }
-
-    _assignPartial(iObj, oObj = {}, str, unsetOnly = false ) {
-        str = str.split(',');
-        if ( !unsetOnly ) {
-          for ( let i in str ) {
-            let index = str[i];
-            if ( typeof iObj[index] != 'undefined') {
-              oObj[index] = iObj[index];
-            }
-          }
-        }
-        else {
-          for ( let i in iObj ) {
-            let index = str.indexOf( i ); 
-            if ( index === -1) {
-              oObj[i] = iObj[i];
-            }
-          }
-        }
-        return oObj;
-    }
-    
-    setAccessKey (api) {
-        if (api.access_token && api.access_token.length > 50) {
-            globalThis.apiAccessToken = api.access_token;
-            if (typeof(Storage) !== "undefined") {
-                localStorage.setItem('apiAccessToken', api.access_token);
-            }
-        }
-    }
-}
 export class JStore {
     constructor(options={}) {
         this._options = options;
@@ -239,7 +69,7 @@ export class JStore {
         }
     }
 }
-export default class JUI extends API{
+export default class JUI {
     constructor(options) {
         super();
         this.trackInf = {};
@@ -264,25 +94,6 @@ export default class JUI extends API{
                 }
             }, 500);
         }   
-    }
-
-    validate(isExpired) {
-        return new Promise((resolve, reject) => {
-            this.validateApp(isExpired).then((tokenApi) => {
-                if (tokenApi.status != 'Success') {
-                    reject(tokenApi);
-                } else {
-                    try {
-                        this.setAccessKey(tokenApi);
-                        resolve(tokenApi);
-                    } catch (err) {
-                        reject(err);
-                    }
-                }
-            }).catch((err) => {
-                reject(err);
-            });
-        });
     }
 
     param2Url(params) {

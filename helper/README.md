@@ -6,7 +6,6 @@ Pure javascript based package, with no dependencies
 > The JUI package is build to provide alternative of jQuery features and dragables.
 > - Intregated JQ like features.
 > - JS based dragble feature.
-> - API calling and integartion methods using Ajax (can overided servers).
 > - Tag view feature for input type text boxes
 
 
