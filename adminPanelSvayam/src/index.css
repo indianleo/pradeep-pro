@@ -1,0 +1,59 @@
+:root {
+  --primary-color: #222;
+  --secondary-color: #f4c81e;
+  --secondary-color-with-opacity: #bab4e21f;
+  --background-color: #f5f5fd;
+  --background-color-hover: #e5e5ec;
+  --text: #9792c7;
+  --white: #fff;
+  --black: #000;
+}
+  
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--white);
+  color: var(--primary-color);
+}
+  
+.bg-theme{
+  background-color:  var(--secondary-color) !important;
+  color: #444;
+}
+
+  
+.sidebar-menu ul li:hover{
+  background-color:  #f7ca1c99 !important;
+  cursor: pointer;
+}
+
+.img-responsive{
+  border-radius: 50px 50px 50px 0;
+  border: .5px dashed  var(--secondary-color);
+  padding: 5px;
+}
+
+#close-sidebar:hover{
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 0 20px var(--primary-color);
+}
+
+.active{
+  background-color:  var(--secondary-color);
+  color: #444;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+@-webkit-keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+.blink {
+  animation: blink 1s step-start 0s infinite;
+  -webkit-animation: blink 1s step-start 0s infinite;
+}

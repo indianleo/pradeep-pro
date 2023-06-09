@@ -1,0 +1,56 @@
+.MuiFormControlLabel-root {
+    display: block !important;
+    margin-left: 0px !important;
+}
+
+.leftPanel{
+    height: 100vh;
+    background: #eee;
+    overflow: scroll;
+}
+
+.leftBtn{
+    width: 30px;
+    background: #fff;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: 0 0 10px #999;
+}
+
+.bottomArea{
+    position: absolute;
+    bottom:0;
+    height: 80px;
+    background: #eee;
+    width: 100%;
+    margin:0;
+    padding: 0;
+}
+
+.bottomBtn{
+    width: 100px;
+    margin: 20px;
+    height: 40px;
+    background: #fff;
+    padding: 5px;
+    box-shadow: 0 0 10px #999;
+}
+
+.timer{
+    position: relative;
+    top:0;
+    height: 50px;
+    display: inline-block;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+    margin:0;
+    padding: 0;
+}
+
+.questoinArea{
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 15px;
+    padding: 20px;
+}

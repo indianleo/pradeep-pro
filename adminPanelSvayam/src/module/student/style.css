@@ -1,0 +1,19 @@
+.language {
+    position: fixed;
+    color: white;
+    right: 0;
+    top: 0;
+    background: #000;
+    padding: 1px 30px;
+    border-radius: 0 0 0 100px;
+    margin: 0;
+}
+
+.select{
+    padding: 0;
+    margin: 10px 0;
+}
+
+.mh-2{
+    min-height: 40px;
+}

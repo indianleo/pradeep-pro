@@ -172,7 +172,7 @@ JS.create(tagName, html);
 // To clone node 
 JS.clone('selector');
 
-// To setrialize form nodes
+// To serialize form nodes
 JS.serialize(selector);
 
 // To empty dom I.e $.empty()

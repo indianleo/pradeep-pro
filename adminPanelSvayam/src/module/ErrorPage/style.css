@@ -1,0 +1,41 @@
+.errorImage {
+    display: block;
+    content: "";
+    background: #ffffff url('./../../images/404.png') no-repeat ;
+    background-size: 70%;
+    opacity: 0.5;
+    top: 0;
+    --x: 0px;
+    --y: 0px;
+    background-position: var(--x) var(--y);
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -3;
+}
+
+.errorImage2 {
+    display: block;
+    content: "";
+    background: #ffffff url('./../../images/scr.jpg') ;
+    background-size: 20%;
+    opacity: 0.1;
+    top: 0;
+    --x: 0px;
+    --y: 0px;
+    background-position: var(--x) var(--y);
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -2;
+}
+.center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
