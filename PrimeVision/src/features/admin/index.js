@@ -1,10 +1,12 @@
 import React from "react";
 import { db, getDbRef } from "../../config/fbConnect";
 import { onValue } from "firebase/database";
+import { ssd } from "../../libs/helper";
 
 const Admin = (props) => {
     const [list, setList] = React.useState({});
     const [selected, setSelected] = React.useState('');
+    const user = ssd.get('user');
 
     React.useEffect(()=> {
         const usersRef = getDbRef('users/');
@@ -32,9 +34,12 @@ const Admin = (props) => {
     }
 
     const loadImg = ()=> {
-        const d = list[selected]?.map((item, index)=> {
+        const d = list[selected]?.proof?.map((item, index)=> {
             return(
-                <div key={index}>
+                <div key={index} style={{padding: '10px', border: '1px solid green'}}>
+                    <div>
+                        <span style={{padding: '5px'}}>IP: {item.coords}</span>
+                    </div>
                     <img src={item.imgUrl} />
                 </div>
             )

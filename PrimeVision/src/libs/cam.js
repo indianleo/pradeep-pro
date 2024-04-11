@@ -22,7 +22,7 @@ export function getCam(id=null) {
     };
 
     /* Stream it to video element */
-    navigator.mediaDevices.getUserMedia(constraints).then(function success(stream) {
+    navigator?.mediaDevices?.getUserMedia(constraints).then(function success(stream) {
         video.srcObject = stream;
     });
 }

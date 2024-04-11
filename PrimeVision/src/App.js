@@ -4,23 +4,39 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './features/home';
 import Admin from './features/admin';
 import React from 'react';
+import { AppProvider } from './context/AppContext';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Login from './features/login';
+import { ssd } from './libs/helper';
 
 function App() {
-  const [isAdmin, setAdmin] = React.useState(false);
-
-  React.useEffect(()=> {
-    const urlParams = new URLSearchParams(window.location.search);
-    const myParam = urlParams.get('admin'); 
-    if (myParam == '7800794002') {
-      setAdmin(true);
-    }
-  }, [])
+  const user = ssd.get('user');
 
   return (
-    <div className="App">
-      <Header />
-      {isAdmin ? <Admin /> : <Home />}
-    </div>
+    <AppProvider>
+      <div className="App">
+        <Router>
+          <Header />
+          <div className="container">
+            <Routes>
+              {user.isLogin
+                ? <Route path="/" element={<Home />} />
+                : <>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/home" element={<Home />} />
+                </>
+              }
+                <Route path="/william" element={<Admin />} />
+            </Routes>
+          </div>
+          {/* <Footer /> */}
+        </Router>
+      </div>
+    </AppProvider>
   );
 }
 
