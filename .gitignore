@@ -1,1 +1,3 @@
 chatBot/node_modules/.bin/is-ci
+*/node_modules
+PrimeVision/node_modules
